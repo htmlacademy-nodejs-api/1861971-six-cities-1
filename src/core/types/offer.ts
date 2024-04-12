@@ -5,7 +5,8 @@ import {
 } from '../constants/index.js';
 import {
   CoordinatesOffer,
-  User
+  User,
+  PhotosHousing
 } from './index.js';
 
 export type CitiesList = typeof NamesCities[keyof typeof NamesCities];
@@ -18,14 +19,7 @@ export type Offer = {
   datePublication: string;
   city: CitiesList;
   previewImage: string;
-  photosHousing: [
-    string,
-    string,
-    string,
-    string,
-    string,
-    string
-  ],
+  photosHousing: PhotosHousing,
   premium: boolean;
   favorites: boolean;
   rating: number;

@@ -9,10 +9,15 @@ import {
   TypeHousinList,
   TypeComfortList
 } from '../types/index.js';
-import {TypeUserList} from '../types/index.js';
+import {
+  TypeUserList,
+  PhotosHousing
+} from '../types/index.js';
 import {
   CoordinatesList,
-  NamesCities
+  NamesCities,
+  RADIX,
+  Avatar
 } from '../constants/index.js';
 
 export default class TSVFileReader implements FileReaderInterface {
@@ -30,6 +35,8 @@ export default class TSVFileReader implements FileReaderInterface {
   }
 
   public getOffersList(): Offer[] {
+    const {Empty, Default} = Avatar;
+
     if (!this.rawData) {
       return [];
     }
@@ -60,14 +67,7 @@ export default class TSVFileReader implements FileReaderInterface {
         numberOfComments
       ]) => {
         const namesCities: CitiesList = NamesCities[city as CitiesList];
-        const photosList = photosHousing.split(',') as [
-          string,
-          string,
-          string,
-          string,
-          string,
-          string
-        ];
+        const photosList = photosHousing.split(',') as PhotosHousing;
         const nameHousing = typeHousing as TypeHousinList;
         const nameComfort = comforts as TypeComfortList;
         const categoryUser = typeUser as TypeUserList;
@@ -81,20 +81,20 @@ export default class TSVFileReader implements FileReaderInterface {
           photosHousing: photosList,
           premium: JSON.parse(premium),
           favorites: JSON.parse(favorites),
-          rating: Number.parseInt(rating, 10),
+          rating: Number.parseInt(rating, RADIX),
           typeHousing: nameHousing,
-          numberRooms: Number.parseInt(numberRooms, 10),
-          numberGuests: Number.parseInt(numberGuests, 10),
-          rentPrice: Number.parseInt(rentPrice, 10),
+          numberRooms: Number.parseInt(numberRooms, RADIX),
+          numberGuests: Number.parseInt(numberGuests, RADIX),
+          rentPrice: Number.parseInt(rentPrice, RADIX),
           comforts: nameComfort,
           authorOfOffer: {
             name,
             email,
-            avatarUser: avatarUser === ' ' ? 'default-avatar.jpg' : avatarUser,
+            avatarUser: avatarUser === Empty ? Default : avatarUser,
             password,
             typeUser: categoryUser
           },
-          numberOfComments: Number.parseInt(numberOfComments, 10),
+          numberOfComments: Number.parseInt(numberOfComments, RADIX),
           coordinates: CoordinatesList[namesCities]
         });
       });
