@@ -15,7 +15,7 @@ export default class VersionCommand implements CliCommandInterface {
       const filePath = resolve('./package.json');
       const contentPageJSON = await readFile(filePath, {encoding:'utf-8'});
       const content = JSON.parse(contentPageJSON);
-      return showResult(content.version);
+      return showResult(`Версия приложения: ${content.version}`);
     }catch(error){
       return showError(error);
     }
