@@ -1,0 +1,79 @@
+{
+  "api": {
+    "denomination": [
+      "Apartments",
+      "Guest house",
+      "Comfortable room",
+      "Star hotel",
+      "Penthouse"
+    ],
+    "descriptionOffer": [
+      "This is apartments is good for big family.",
+      "This is house located in the city center.",
+      "This is room located far from the city center.",
+      "This is hotel lacated in the city center near to the square of stars.",
+      "This is penthouse for noisy parties and noisy families."
+    ],
+    "city": [
+      "Paris",
+      "Cologne",
+      "Brussels",
+      "Amsterdam",
+      "Hamburg",
+      "Dusseldorf"
+    ],
+    "previewImage": [
+      "photo-apartments.jpg",
+      "photo-house.jpg",
+      "photo-penthouse.jpg",
+      "photo-room.jpg",
+      "photo-hotel.jpg"
+    ],
+    "photosHousing": [
+      "photo-1.jpg",
+      "photo-2.jpg",
+      "photo-3.jpg",
+      "photo-4.jpg",
+      "photo-5.jpg",
+      "photo-6.jpg"
+    ],
+    "typeHousing": [
+      "apartment",
+      "house",
+      "room",
+      "hotel"
+    ],
+    "comforts": [
+      "Breakfast",
+      "Air conditioning",
+      "Laptop friendly workspace",
+      "Baby seat",
+      "Washer",
+      "Towels",
+      "Fridge"
+    ],
+    "name": [
+      "Vlad",
+      "Anna",
+      "Sergei"
+    ],
+    "email": [
+      "v34yan@yan.ru",
+      "anna@medkova.ru",
+      "sergei@a.ru"
+    ],
+    "avatarUser": [
+      "yan34v",
+      "anna.jpg"
+    ],
+    "password": [
+      "yan34v",
+      "medkova",
+      "sergei13"
+    ],
+    "typeUser": [
+      "ordinary",
+      "pro"
+    ]
+  }
+}

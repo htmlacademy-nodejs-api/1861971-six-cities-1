@@ -1,4 +1,4 @@
 export const TypeUser = {
-  Обычный: 'обычны',
+  Ordinary: 'ordinary',
   Pro: 'pro'
 } as const;
