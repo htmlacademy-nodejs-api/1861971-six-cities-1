@@ -8,7 +8,8 @@ import {
   showError,
   showResult,
   getErrorMessage
-} from '../../app/index.js';
+} from '../../helpers/index.js';
+import {RADIX} from '../constants/index.js';
 
 export default class GenerateCommand implements CliCommandInterface {
   public readonly name = '--generate';
@@ -17,7 +18,7 @@ export default class GenerateCommand implements CliCommandInterface {
   public async execute(...parameters:string[]): Promise<void> {
     const [count, filepath, url] = parameters;
 
-    const offerCount = Number.parseInt(count, 10);
+    const offerCount = Number.parseInt(count, RADIX);
 
     try {
       this.initialData = (await axios.get(url)).data;

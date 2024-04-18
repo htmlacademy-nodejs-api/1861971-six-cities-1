@@ -5,7 +5,7 @@ import { CliCommandInterface } from './index.js';
 import {
   showError,
   showResult
-} from '../../app/index.js';
+} from '../../helpers/index.js';
 
 export default class VersionCommand implements CliCommandInterface {
   public readonly name = '--version';

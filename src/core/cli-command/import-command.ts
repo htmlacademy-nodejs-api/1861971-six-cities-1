@@ -5,7 +5,7 @@ import {
   getErrorMessage,
   showResult,
   showError
-} from '../../app/index.js';
+} from '../../helpers/index.js';
 
 export default class ImportCommand implements CliCommandInterface {
   public readonly name = '--import';
