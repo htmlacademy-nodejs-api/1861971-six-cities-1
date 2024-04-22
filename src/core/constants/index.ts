@@ -6,3 +6,4 @@ export * from './type-user.enum.js';
 export * from './radix.js';
 export * from './avatar.enum.js';
 export * from './value.enum.js';
+export * from './app-component.enum.js';
