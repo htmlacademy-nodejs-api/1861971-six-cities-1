@@ -24,7 +24,7 @@ export default class OfferGenerator implements OfferGeneratorInterface {
     const photosHousing = this.mockData.photosHousing;
     const premium = getRandomNamber(Value[0], Value[1]);
     const favorites = getRandomNamber(Value[0], Value[1]);
-    const rating = getRandomNamber(Value[0], Value[5]);
+    const rating = getRandomNamber(Value[1], Value[5]);
     const typeHousing = this.mockData.typeHousing[secondRandomNumber] ?? this.mockData.typeHousing[1];
     const numberRooms = getRandomNamber(Value[1], Value[8]);
     const numberGuests = getRandomNamber(Value[1], Value[10]);
