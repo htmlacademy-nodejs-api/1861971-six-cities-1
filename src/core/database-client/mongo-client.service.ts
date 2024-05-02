@@ -8,10 +8,11 @@ import { setTimeout } from 'node:timers/promises';
 import { DatabaseClientInterface } from './index.js';
 import {
   AppComponent,
-  RETRY_COUNT,
-  RETRY_TIMEOUT
+  ConnectionValue
 } from '../constants/index.js';
 import { LoggerInterface } from '../logger/index.js';
+
+const {RetryCount, RetryTimeout} = ConnectionValue;
 
 @injectable()
 export default class MongoClientService implements DatabaseClientInterface {
@@ -24,14 +25,14 @@ export default class MongoClientService implements DatabaseClientInterface {
 
   private async _connectWithRetry(uri: string): Promise<void> {
     let attempt = 0;
-    while (attempt < RETRY_COUNT) {
+    while (attempt < RetryCount) {
       try {
         this.mongooseInstance = await Mongoose.connect(uri);
         return;
       } catch (error) {
         attempt++;
         this.logger.error(`Failed to connect to the database. Attempt ${attempt}`);
-        await setTimeout(RETRY_TIMEOUT);
+        await setTimeout(RetryTimeout);
       }
     }
 

@@ -5,9 +5,9 @@ import { AppComponent } from '../../core/constants/index.js';
 import OfferService from './offer.service.js';
 import {
   OfferEntity,
-  OfferModel
-} from './offer.entity.js';
-import {OfferServiceInterface} from './offer-service.interface.js';
+  OfferModel,
+  OfferServiceInterface
+} from './index.js';
 
 export function createOfferContainer() {
   const offerContainer = new Container();

@@ -18,10 +18,12 @@ import UserService from '../../modules/user/user.service.js';
 import MongoClientService from '../database-client/mongo-client.service.js';
 import {Offer} from '../types/index.js';
 import {OfferModel} from '../../modules/offer/offer.entity.js';
-import {OfferServiceInterface} from '../../modules/offer/offer-service.interface.js';
+import {OfferServiceInterface} from '../../modules/offer/index.js';
 import OfferService from '../../modules/offer/offer.service.js';
+import {DefaultValues} from '../constants/index.js';
 
 const DEFAULT_USER_PASSWORD = 'v1984vlad';
+const {UserName, Password, Host, Port, Salt} = DefaultValues;
 
 export default class ImportCommand implements CliCommandInterface {
   public readonly name = '--import';
@@ -29,7 +31,12 @@ export default class ImportCommand implements CliCommandInterface {
   private offerService!: OfferServiceInterface;
   private databaseService!: DatabaseClientInterface;
   private logger!: LoggerInterface;
-  private salt!: string;
+  private readonly salt = Salt;
+  private readonly username = UserName;
+  private readonly password = Password;
+  private readonly host = Host;
+  private readonly port = Port;
+
 
   constructor() {
     this.onLine = this.onLine.bind(this);
@@ -66,19 +73,13 @@ export default class ImportCommand implements CliCommandInterface {
 
   public async execute(
     filename: string,
-    username = 'VladVankov',
-    password = 'v1984vlad',
-    host = '127.0.0.1',
-    port = '50483',
-    salt = 'node.js'
   ): Promise<void> {
     const url = getMongoURI(
-      username,
-      password,
-      host,
-      port
+      this.username,
+      this.password,
+      this.host,
+      this.port
     );
-    this.salt = salt;
 
     await this.databaseService.connect(url);
 

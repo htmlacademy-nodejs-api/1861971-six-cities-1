@@ -7,6 +7,6 @@ export * from './radix.js';
 export * from './avatar.enum.js';
 export * from './value.enum.js';
 export * from './app-component.enum.js';
-export * from './retry-count.js';
-export * from './retry-timeout.js';
+export * from './connection-value.js';
 export * from './image-format.js';
+export * from './default-values.js';

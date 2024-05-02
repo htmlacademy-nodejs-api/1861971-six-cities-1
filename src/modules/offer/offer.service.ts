@@ -7,8 +7,10 @@ import { DocumentType, types } from '@typegoose/typegoose';
 import { AppComponent } from '../../core/constants/index.js';
 import { LoggerInterface } from '../../core/logger/index.js';
 import CreateOfferDto from './dto/create-offer.dto.js';
-import {OfferEntity} from './offer.entity.js';
-import {OfferServiceInterface} from './offer-service.interface.js';
+import {
+  OfferEntity,
+  OfferServiceInterface
+} from './index.js';
 
 @injectable()
 export default class OfferService implements OfferServiceInterface {
