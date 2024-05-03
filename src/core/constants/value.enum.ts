@@ -1,10 +1,10 @@
 export const Value = {
-  '0': 0,
-  '1': 1,
-  '5': 5,
-  '6': 6,
-  '8': 8,
-  '10': 10,
-  '100': 100,
-  '100000': 100000
+  Zero: 0,
+  One: 1,
+  Five: 5,
+  Six: 6,
+  Eight: 8,
+  Ten: 10,
+  OneHundred: 100,
+  OneHundredThousand: 100000
 } as const;
