@@ -16,13 +16,11 @@ export default class CreateOfferDto {
   public photosHousing!: PhotosHousing;
   public premium!: boolean;
   public favorites!: boolean;
-  public rating!: number;
   public typeHousing!: TypeHousinList;
   public numberRooms!: number;
   public numberGuests!: number;
   public rentPrice!: number;
   public comforts!: TypeComfortList;
   public authorOfOffer!: User;
-  public numberOfComments?: number;
   public coordinates!: CoordinatesOffer;
 }

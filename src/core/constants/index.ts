@@ -10,3 +10,4 @@ export * from './app-component.enum.js';
 export * from './connection-value.js';
 export * from './image-format.js';
 export * from './default-values.js';
+export * from './sort-type.enum.js';
