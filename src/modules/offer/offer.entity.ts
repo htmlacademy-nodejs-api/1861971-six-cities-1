@@ -72,6 +72,7 @@ export class OfferEntity extends defaultClasses.TimeStamps {
 
   @prop({
     required: true,
+    default: 1,
     min: 1,
     max: 5
   })
@@ -115,7 +116,7 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   public authorOfOffer!: Ref<UserEntity>;
 
   @prop({
-    default: 10
+    default: 0
   })
   public numberOfComments!: number;
 
