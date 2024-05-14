@@ -1,3 +1,3 @@
-export * from './comment-service.interface';
-export * from './comment.container';
-export * from './comment.entity';
+export * from './comment-service.interface.js';
+export * from './comment.container.js';
+export * from './comment.entity.js';

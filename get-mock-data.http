@@ -1,4 +1,3 @@
 # Get mock data from fake server
-GET /api HTTP/1.1
-Host: localhost:3000
-Content-Type: application/json; charset=utf-8
+GET http://localhost:3000/api
+Content-Type: application/json

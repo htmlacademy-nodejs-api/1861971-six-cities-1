@@ -16,6 +16,7 @@ import {
   OfferEntity,
   OfferServiceInterface
 } from './index.js';
+import {CitiesList} from '../../core/types/index.js';
 
 @injectable()
 export default class OfferService implements OfferServiceInterface {
@@ -44,25 +45,26 @@ export default class OfferService implements OfferServiceInterface {
       .exec();
   }
 
-  public async getOffersList(count?: number): Promise<DocumentType<OfferEntity>[] | null> {
+  public async getOffersList(count?: string | undefined): Promise<DocumentType<OfferEntity>[] | null> {
     const limit = count ?? DefaultValues.OfferCount;
 
     return this.offerModel
       .find()
       .sort({datePublication: SortType.Down})
-      .limit(limit)
+      .limit(Number(limit))
       .exec();
   }
 
   public async findById(offerId: string): Promise<DocumentType<OfferEntity> | null> {
     return this.offerModel
       .findById(offerId)
+      /*
       .aggregate([
         {
           $lookup: {
             from: 'comments',
             pipeline: [
-              { $match: { $expr: { $in: ['offerId', '$offerId'] } } },
+              { $match: { $expr: { $in: [offerId, '$offerId'] } } },
               { $project: { rating: 1}}
             ],
             as: 'comments'
@@ -72,13 +74,14 @@ export default class OfferService implements OfferServiceInterface {
         {rating: { $cond: { $isArray: '$rating' }, then: { $size: '$rating' }}},
         { $unset: ['comments'] }
       ])
+      */
       .exec();
   }
 
-  public async findPremiumOffers(): Promise<DocumentType<OfferEntity>[] | null> {
+  public async findPremiumOffers(nameCity: CitiesList): Promise<DocumentType<OfferEntity>[] | null> {
 
     return this.offerModel
-      .find({premium: true})
+      .find({city: nameCity, premium: true})
       .sort({datePublication: SortType.Down})
       .limit(DefaultValues.PremiumOfferCount)
       .exec();

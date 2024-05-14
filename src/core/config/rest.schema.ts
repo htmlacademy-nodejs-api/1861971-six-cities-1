@@ -12,16 +12,10 @@ export const configRestSchema = convict<RestSchema>({
     env: 'PORT',
     default: 4000
   },
-  DB_ADDRESS: {
-    doc: 'IP address of the database server (MongoDB)',
-    format: 'ipaddress',
-    env: 'DB_ADDRESS',
-    default: '127.0.0.1'
-  },
-  SOLT: {
+  SALT: {
     doc: 'Salt for password hash',
     format: String,
-    env: 'SOLT',
+    env: 'SALT',
     default: null
   },
   DB_USER: {
@@ -46,6 +40,6 @@ export const configRestSchema = convict<RestSchema>({
     doc: 'Port to connect to the database (MongoDB)',
     format: 'port',
     env: 'DB_PORT',
-    default: '50483',
+    default: '52701',
   }
 });

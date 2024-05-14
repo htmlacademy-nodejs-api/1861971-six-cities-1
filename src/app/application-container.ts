@@ -9,6 +9,10 @@ import {ConfigInterface} from '../core/config/index.js';
 import {DatabaseClientInterface} from '../core/database-client/index.js';
 import {RestSchema} from '../core/types/index.js';
 import {AppComponent} from '../core/constants/index.js';
+import {
+  ExceptionFilter,
+  AppExceptionFilter
+} from '../libs/exception-filter/index.js';
 
 export function createApplicationContainer() {
   const applicationContainer = new Container();
@@ -16,6 +20,7 @@ export function createApplicationContainer() {
   applicationContainer.bind<LoggerInterface>(AppComponent.LoggerInterface).to(PinoService).inSingletonScope();
   applicationContainer.bind<ConfigInterface<RestSchema>>(AppComponent.ConfigInterface).to(ConfigService).inSingletonScope();
   applicationContainer.bind<DatabaseClientInterface>(AppComponent.DatabaseClientInterface).to(MongoClientService).inSingletonScope();
+  applicationContainer.bind<ExceptionFilter>(AppComponent.ExceptionFilter).to(AppExceptionFilter).inSingletonScope();
 
   return applicationContainer;
 }
