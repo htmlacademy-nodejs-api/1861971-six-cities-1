@@ -6,3 +6,5 @@ export * from './show-error.js';
 export * from './show-result.js';
 export * from './db-url.js';
 export * from './create-hash.js';
+export * from './exclude-extraneous-values.js';
+export * from './create-error-object.js';
