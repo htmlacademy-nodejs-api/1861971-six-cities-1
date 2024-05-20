@@ -106,7 +106,7 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   @prop({
     required: true
   })
-  public comforts!: TypeComfortList;
+  public comforts!: TypeComfortList[];
 
   @prop({
     required: true,

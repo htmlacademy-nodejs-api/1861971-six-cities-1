@@ -12,5 +12,4 @@ export interface OfferServiceInterface {
   getOffersList(count?: string): Promise<DocumentType<OfferEntity>[] | null>;
   findById(offerId: string | undefined): Promise<DocumentType<OfferEntity> | null>;
   findPremiumOffers(nameCity: CitiesList): Promise<DocumentType<OfferEntity>[] | null>;
-  findFavoritesOffers(): Promise<DocumentType<OfferEntity>[] | null>;
 }

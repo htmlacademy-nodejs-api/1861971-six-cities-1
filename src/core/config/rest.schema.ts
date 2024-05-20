@@ -40,6 +40,6 @@ export const configRestSchema = convict<RestSchema>({
     doc: 'Port to connect to the database (MongoDB)',
     format: 'port',
     env: 'DB_PORT',
-    default: '52701',
+    default: '20047',
   }
 });

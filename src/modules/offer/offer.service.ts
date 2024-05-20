@@ -58,23 +58,6 @@ export default class OfferService implements OfferServiceInterface {
   public async findById(offerId: string): Promise<DocumentType<OfferEntity> | null> {
     return this.offerModel
       .findById(offerId)
-      /*
-      .aggregate([
-        {
-          $lookup: {
-            from: 'comments',
-            pipeline: [
-              { $match: { $expr: { $in: [offerId, '$offerId'] } } },
-              { $project: { rating: 1}}
-            ],
-            as: 'comments'
-          },
-        },
-        {numberOfComments: { $size: '$comments'}},
-        {rating: { $cond: { $isArray: '$rating' }, then: { $size: '$rating' }}},
-        { $unset: ['comments'] }
-      ])
-      */
       .exec();
   }
 
@@ -87,10 +70,4 @@ export default class OfferService implements OfferServiceInterface {
       .exec();
   }
 
-  public async findFavoritesOffers(): Promise<DocumentType<OfferEntity>[] | null> {
-
-    return this.offerModel
-      .find({favorites: true})
-      .exec();
-  }
 }

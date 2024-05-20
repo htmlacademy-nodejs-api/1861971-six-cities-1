@@ -4,3 +4,4 @@ export * from './user.entity.js';
 export * from './user.service.js';
 export * from './create-user-request.type.js';
 export * from './user.controller.js';
+export * from './scheme-validation.user/scheme-user.js';

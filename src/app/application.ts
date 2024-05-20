@@ -21,7 +21,8 @@ export default class Application {
     @inject(AppComponent.ExceptionFilter) private readonly appExceptionFilter: ExceptionFilter,
     @inject(AppComponent.UserController) private readonly userController: Controller,
     @inject(AppComponent.OfferController) private readonly offerController: Controller,
-    @inject(AppComponent.FavoriteController) private readonly favoriteController: Controller
+    @inject(AppComponent.FavoriteController) private readonly favoriteController: Controller,
+    @inject(AppComponent.CommentController) private readonly commentController: Controller
   ) {
     this.server = express();
   }
@@ -46,6 +47,7 @@ export default class Application {
     this.server.use('/users', this.userController.router);
     this.server.use('/offers', this.offerController.router);
     this.server.use('/favorite', this.favoriteController.router);
+    this.server.use('/comments', this.commentController.router);
   }
 
   private async _initMiddleware() {

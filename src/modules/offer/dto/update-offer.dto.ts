@@ -21,7 +21,7 @@ export default class UpdateOfferDto {
   public numberRooms?: number;
   public numberGuests?: number;
   public rentPrice?: number;
-  public comforts?: TypeComfortList;
+  public comforts?: TypeComfortList[];
   public authorOfOffer?: User;
   public numberOfComments?: number;
   public coordinates?: CoordinatesOffer;

@@ -14,10 +14,12 @@ import { ConfigInterface } from '../../core/config/index.js';
 import {RestSchema} from '../../core/types/index.js';
 import {
   UserServiceInterface,
-  CreateUserRequest
+  CreateUserRequest,
+  schemeUser
 } from './index.js';
 import { excludeExtraneousValues } from '../../helpers/index.js';
 import UserRdo from './rdo/user.rdo.js';
+import {ValidateDtoMiddleware} from '../../libs/middleware/validate-dto.middleware.js';
 
 @injectable()
 export class UserController extends BaseController {
@@ -29,7 +31,12 @@ export class UserController extends BaseController {
     super(logger);
     this.logger.info('Register routes for UserController…');
 
-    this.addRoute({ path: '/register', method: HttpMethod.Post, handler: this.create });
+    this.addRoute({
+      path: '/register',
+      method: HttpMethod.Post,
+      handler: this.create,
+      middlewares: [new ValidateDtoMiddleware(schemeUser)]
+    });
   }
 
   public async create(
