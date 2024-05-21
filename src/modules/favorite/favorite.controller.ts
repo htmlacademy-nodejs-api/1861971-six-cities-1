@@ -2,7 +2,10 @@ import {
   inject,
   injectable
 } from 'inversify';
-import { Response } from 'express';
+import {
+  Request,
+  Response
+} from 'express';
 import { StatusCodes } from 'http-status-codes';
 
 import {BaseController} from '../../libs/controller/index.js';
@@ -13,7 +16,8 @@ import { LoggerInterface } from '../../core/logger/index.js';
 import {UserServiceInterface} from '../user/index.js';
 import {
   OfferServiceInterface,
-  OfferEntity
+  OfferEntity,
+  ParamOfferId
 } from '../offer/index.js';
 import OffersListRdo from '../offer/rdo/offers-list.rdo.js';
 import { excludeExtraneousValues } from '../../helpers/index.js';
@@ -21,6 +25,8 @@ import {
   CreateFavoriteRequest,
   FavoriteServiceInterface,
 } from './index.js';
+import {ValidateObjectIdMiddleware} from '../../libs/middleware/index.js';
+import CreateFavoriteDto from '../favorite/dto/create-favorite.dto.js';
 
 @injectable()
 export class FavoriteController extends BaseController {
@@ -33,13 +39,23 @@ export class FavoriteController extends BaseController {
     super(logger);
     this.logger.info('Register routes for FavoriteController');
 
-    this.addRoute({ path: '/create/:id', method: HttpMethod.Post, handler: this.create });
-    this.addRoute({ path: '/delete/:id', method: HttpMethod.Delete, handler: this.delete });
+    this.addRoute({
+      path: '/create/:offerId',
+      method: HttpMethod.Post,
+      handler: this.create,
+      middlewares: [new ValidateObjectIdMiddleware('offerId')]
+    });
+    this.addRoute({
+      path: '/delete/:offerId',
+      method: HttpMethod.Delete,
+      handler: this.delete,
+      middlewares: [new ValidateObjectIdMiddleware('offerId')]
+    });
     this.addRoute({ path: '/list', method: HttpMethod.Get, handler: this.getFavoriteOffersList });
   }
 
   public async create(
-    { body, params: {id} }: CreateFavoriteRequest,
+    { body, params: {offerId} }: Request<ParamOfferId, unknown, CreateFavoriteDto>,
     res: Response,
   ): Promise<void> {
     const existsUser = await this.userService.findByEmail(body.email);
@@ -52,19 +68,19 @@ export class FavoriteController extends BaseController {
       );
     }
 
-    const existsFavoriteOffer = await this.favoriteService.findFavoriteOffer({offer: id as string, email: body.email});
+    const existsFavoriteOffer = await this.favoriteService.findFavoriteOffer({offer: offerId, email: body.email});
 
     if (existsFavoriteOffer) {
-      this.ok<string>(res, `Offer with ${id} has been added to favorites.`);
+      this.ok<string>(res, `Offer with ${offerId} has been added to favorites.`);
       return;
     }
 
-    await this.favoriteService.create({offer: id as string, email: body.email});
-    this.created<string>(res, `Offer with ${id} added to favorites.`);
+    await this.favoriteService.create({offer: offerId, email: body.email});
+    this.created<string>(res, `Offer with ${offerId} added to favorites.`);
   }
 
   public async delete(
-    { body, params: {id} }: CreateFavoriteRequest,
+    { body, params: {offerId} }: Request<ParamOfferId, unknown, CreateFavoriteDto>,
     res: Response,
   ): Promise<void> {
     const existsUser = await this.userService.findByEmail(body.email);
@@ -77,12 +93,12 @@ export class FavoriteController extends BaseController {
       );
     }
 
-    const existsFavoriteOffer = await this.favoriteService.findFavoriteOffer({offer: id as string, email: body.email});
+    const existsFavoriteOffer = await this.favoriteService.findFavoriteOffer({offer: offerId, email: body.email});
 
     if (!existsFavoriteOffer) {
       throw new HttpError(
         StatusCodes.CONFLICT,
-        `You can't delete an offer with ${id} because you didn't create it.`,
+        `You can't delete an offer with ${offerId} because you didn't create it.`,
         'FavoriteController'
       );
     }

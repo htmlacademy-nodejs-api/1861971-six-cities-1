@@ -4,3 +4,6 @@ export * from './offer.entity.js';
 export * from './offer.service.js';
 export * from './create-offer-request.type.js';
 export * from './offer.controller.js';
+export * from './param-offerid.type.js';
+export * from './scheme-validation.offer/scheme-create-offer.js';
+export * from './scheme-validation.offer/sheme-update-offer.js';

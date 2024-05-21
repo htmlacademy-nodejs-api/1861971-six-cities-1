@@ -25,19 +25,25 @@ export default class CommentService implements CommentServiceInterface {
   ) {}
 
   public async create(dto: CreateCommentDto): Promise<DocumentType<CommentEntity>> {
-    const comment = await this.commentModel
-      .create(dto);
+    const dataComment = await this.commentModel.create(dto);
 
-    return comment
-      .populate('userId');
+    return dataComment
+      .populate('authorOfOffer');
   }
 
-  public async findByOfferId(offerId: string): Promise<DocumentType<CommentEntity>[] | null> {
+  public async findByOfferId(offerId: string): Promise<DocumentType<CommentEntity>[]> {
+
     return this.commentModel
       .find({offerId})
       .sort({createdAt: SortType.Down})
       .limit(DefaultValues.CommentCount)
-      .populate('userId')
+      .populate('authorOfOffer')
+      .exec();
+  }
+
+  public async deleteById(offerId: string): Promise<{deletedCount: number}> {
+    return this.commentModel
+      .deleteMany({offerId})
       .exec();
   }
 }

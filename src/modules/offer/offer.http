@@ -24,10 +24,10 @@ Content-Type: application/json
   "numberRooms": 6,
   "numberGuests": 9,
   "rentPrice": 12752,
-  "comforts": "Baby seat,Washer,Towels,Fridge",
+  "comforts": ["Baby seat","Washer","Towels","Fridge"],
   "authorOfOffer": {
-    "name": "Vlad",
-    "email": "v34yan@yan.ru",
+    "name": "Alexs",
+    "email": "yan@yan.ru",
     "avatarUser": "yan34v.jpg",
     "typeUser": "ordinary"
   },
@@ -40,7 +40,7 @@ Content-Type: application/json
 ###
 ## Редактирование предложения
 
-PATCH  http://localhost:4000/offers/redaction/6641ed7f7ad779afa8d60f9d HTTP/1.1
+PATCH  http://localhost:4000/offers/redaction/66408fea33d03531efaf HTTP/1.1
 Content-Type: application/json
 
 {
@@ -63,7 +63,7 @@ Content-Type: application/json
   "numberRooms": 6,
   "numberGuests": 9,
   "rentPrice": 12752,
-  "comforts": "Washer,Towels,Fridge",
+  "comforts": ["Washer","Towels","Fridge"],
   "authorOfOffer": {
     "name": "Vlad",
     "email": "v34yan@yan.ru",
