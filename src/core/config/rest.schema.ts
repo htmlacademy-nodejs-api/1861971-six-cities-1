@@ -41,5 +41,11 @@ export const configRestSchema = convict<RestSchema>({
     format: 'port',
     env: 'DB_PORT',
     default: '20047',
+  },
+  UPLOAD_DIRECTORY: {
+    doc: 'Directory for upload files',
+    format: String,
+    env: 'UPLOAD_DIRECTORY',
+    default: null
   }
 });

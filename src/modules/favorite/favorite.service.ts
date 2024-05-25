@@ -43,7 +43,7 @@ export default class FavoriteService implements FavoriteServiceInterface {
       .exec();
   }
 
-  public async getFavoriteOffersList(email: string): Promise<DocumentType<FavoriteEntity>[] | null> {
+  public async getFavoriteOffersList(email: string): Promise<DocumentType<FavoriteEntity>[] | []> {
     return this.favoriteModel
       .find({email})
       .sort({createdAt: SortType.Down})

@@ -11,3 +11,4 @@ export * from './connection-value.js';
 export * from './image-format.js';
 export * from './default-values.js';
 export * from './sort-type.enum.js';
+export * from './name-actions.enum.js';

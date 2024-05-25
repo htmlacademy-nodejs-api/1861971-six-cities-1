@@ -6,12 +6,13 @@ import {
   Request,
   Response
 } from 'express';
-import { StatusCodes } from 'http-status-codes';
 
 import {BaseController} from '../../libs/controller/index.js';
 import {HttpMethod} from '../../libs/constants/index.js';
-import {HttpError} from '../../libs/errors/index.js';
-import { AppComponent } from '../../core/constants/index.js';
+import {
+  AppComponent,
+  NameActions
+} from '../../core/constants/index.js';
 import { LoggerInterface } from '../../core/logger/index.js';
 import {UserServiceInterface} from '../user/index.js';
 import {
@@ -20,7 +21,10 @@ import {
   ParamOfferId
 } from '../offer/index.js';
 import OffersListRdo from '../offer/rdo/offers-list.rdo.js';
-import { excludeExtraneousValues } from '../../helpers/index.js';
+import {
+  excludeExtraneousValues,
+  getErrorConflict
+} from '../../helpers/index.js';
 import {
   CreateFavoriteRequest,
   FavoriteServiceInterface,
@@ -61,11 +65,7 @@ export class FavoriteController extends BaseController {
     const existsUser = await this.userService.findByEmail(body.email);
 
     if (!existsUser) {
-      throw new HttpError(
-        StatusCodes.CONFLICT,
-        `User with email ${body.email} not registered.`,
-        'FavoriteController'
-      );
+      getErrorConflict(body.email, NameActions.CheckRegistrationUser);
     }
 
     const existsFavoriteOffer = await this.favoriteService.findFavoriteOffer({offer: offerId, email: body.email});
@@ -86,21 +86,14 @@ export class FavoriteController extends BaseController {
     const existsUser = await this.userService.findByEmail(body.email);
 
     if (!existsUser) {
-      throw new HttpError(
-        StatusCodes.CONFLICT,
-        `User with email ${body.email} not registered.`,
-        'FavoriteController'
-      );
+      getErrorConflict(body.email, NameActions.CheckRegistrationUser);
     }
 
     const existsFavoriteOffer = await this.favoriteService.findFavoriteOffer({offer: offerId, email: body.email});
 
     if (!existsFavoriteOffer) {
-      throw new HttpError(
-        StatusCodes.CONFLICT,
-        `You can't delete an offer with ${offerId} because you didn't create it.`,
-        'FavoriteController'
-      );
+      getErrorConflict(offerId, NameActions.DeleteFavorite);
+      return;
     }
 
     await this.favoriteService.deleteById(existsFavoriteOffer.id);
@@ -115,11 +108,7 @@ export class FavoriteController extends BaseController {
     const existsUser = await this.userService.findByEmail(body.email);
 
     if (!existsUser) {
-      throw new HttpError(
-        StatusCodes.CONFLICT,
-        `User with email ${body.email} not registered.`,
-        'FavoriteController'
-      );
+      getErrorConflict(body.email, NameActions.CheckRegistrationUser);
     }
 
     const favoritOffersList = await this.favoriteService.getFavoriteOffersList(body.email);
@@ -130,7 +119,7 @@ export class FavoriteController extends BaseController {
     }
 
 
-    favoritOffersList?.forEach(async (favoritOffer, _index, array) => {
+    for await (const favoritOffer of favoritOffersList) {
       const offer = await this.offerService.findById(favoritOffer.offer);
 
       const changeOffer = {
@@ -139,10 +128,8 @@ export class FavoriteController extends BaseController {
       };
 
       result.push(changeOffer as OfferEntity);
+    }
 
-      if(result.length - 1 === array.length - 1) {
-        this.ok(res,excludeExtraneousValues(OffersListRdo, result));
-      }
-    });
+    this.ok(res,excludeExtraneousValues(OffersListRdo, result));
   }
 }
