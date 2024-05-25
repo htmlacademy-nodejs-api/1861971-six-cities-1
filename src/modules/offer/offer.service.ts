@@ -45,7 +45,7 @@ export default class OfferService implements OfferServiceInterface {
       .exec();
   }
 
-  public async getOffersList(count?: string | undefined): Promise<DocumentType<OfferEntity>[] | null> {
+  public async getOffersList(count?: string | undefined): Promise<DocumentType<OfferEntity>[] | []> {
     const limit = count ?? DefaultValues.OfferCount;
 
     return this.offerModel

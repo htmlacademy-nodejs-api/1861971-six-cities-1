@@ -6,12 +6,13 @@ import {
   Response,
   Request
 } from 'express';
-import { StatusCodes } from 'http-status-codes';
 
 import {BaseController} from '../../libs/controller/index.js';
 import {HttpMethod} from '../../libs/constants/index.js';
-import {HttpError} from '../../libs/errors/index.js';
-import { AppComponent } from '../../core/constants/index.js';
+import {
+  AppComponent,
+  NameActions
+} from '../../core/constants/index.js';
 import { LoggerInterface } from '../../core/logger/index.js';
 import UserService from '../user/user.service.js';
 import {
@@ -22,7 +23,10 @@ import {
   schemeCreateOffer,
   schemeUpdateOffer
 } from './index.js';
-import { excludeExtraneousValues } from '../../helpers/index.js';
+import {
+  excludeExtraneousValues,
+  getErrorConflict
+} from '../../helpers/index.js';
 import CreateOfferDto from './dto/create-offer.dto.js';
 import OfferRdo from './rdo/offer.rdo.js';
 import OffersListRdo from './rdo/offers-list.rdo.js';
@@ -84,11 +88,7 @@ export class OfferController extends BaseController {
     const registrationUser = await this.userService.findByEmail(body.authorOfOffer.email);
 
     if (!registrationUser) {
-      throw new HttpError(
-        StatusCodes.UNAUTHORIZED,
-        `User with email ${body.authorOfOffer.email} not registered.`,
-        'OfferController'
-      );
+      getErrorConflict(body.authorOfOffer.email, NameActions.CheckRegistrationUser);
     }
 
     const result = await this.offerService.create(body);
@@ -102,21 +102,13 @@ export class OfferController extends BaseController {
     const registrationUser = await this.userService.findByEmail(body.authorOfOffer.email);
 
     if (!registrationUser) {
-      throw new HttpError(
-        StatusCodes.UNAUTHORIZED,
-        `User with email ${body.authorOfOffer.email} not registered.`,
-        'OfferController'
-      );
+      getErrorConflict(body.authorOfOffer.email, NameActions.CheckRegistrationUser);
     }
 
     const dataOffer = await this.offerService.findById(offerId);
 
     if(dataOffer?.authorOfOffer.email !== body.authorOfOffer.email) {
-      throw new HttpError(
-        StatusCodes.CONFLICT,
-        `User with email ${body.authorOfOffer.email} cannote edit this offer.`,
-        'OfferController'
-      );
+      getErrorConflict(body.authorOfOffer.email, NameActions.UpdateOffer);
     }
 
     const result = await this.offerService.updateById(offerId, body);
@@ -130,21 +122,13 @@ export class OfferController extends BaseController {
     const registrationUser = await this.userService.findByEmail(body.authorOfOffer.email);
 
     if (!registrationUser) {
-      throw new HttpError(
-        StatusCodes.UNAUTHORIZED,
-        `User with email ${body.authorOfOffer.email} not registered.`,
-        'OfferController'
-      );
+      getErrorConflict(body.authorOfOffer.email, NameActions.CheckRegistrationUser);
     }
 
     const dataOffer = await this.offerService.findById(offerId);
 
     if(dataOffer?.authorOfOffer.email !== body.authorOfOffer.email) {
-      throw new HttpError(
-        StatusCodes.CONFLICT,
-        `User with email ${body.authorOfOffer.email} cannote delete this offer.`,
-        'OfferController'
-      );
+      getErrorConflict(body.authorOfOffer.email, NameActions.DeleteOffer);
     }
 
     await this.commentService.deleteById(offerId);
@@ -159,7 +143,7 @@ export class OfferController extends BaseController {
     const offersList = await this.offerService.getOffersList(count as string | undefined);
 
     const result: OfferEntity[] = [];
-    offersList?.forEach(async (offer, _index, array) => {
+    for await (const offer of offersList) {
 
       const dataFavorit = await this.favoriteService
         .findFavoriteOffer(
@@ -177,11 +161,9 @@ export class OfferController extends BaseController {
       }else{
         result.push(offer);
       }
+    }
 
-      if(result.length === array.length) {
-        this.ok(res, excludeExtraneousValues(OffersListRdo, result));
-      }
-    });
+    this.ok(res, excludeExtraneousValues(OffersListRdo, result));
   }
 
   public async show (

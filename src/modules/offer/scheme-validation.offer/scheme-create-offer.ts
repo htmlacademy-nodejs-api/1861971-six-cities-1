@@ -1,13 +1,28 @@
 import Joi from 'joi';
 
+import {Value} from '../../../core/constants/index.js';
+
+const {
+  Ten,
+  OneHundred,
+  Twenty,
+  OneThousandTwentyFour,
+  Six,
+  One,
+  Eight,
+  OneHundredThousand,
+  Sewen,
+  Fifteen,
+} = Value;
+
 export const schemeCreateOffer = Joi.object({
   denomination: Joi.string()
-    .min(10)
-    .max(100)
+    .min(Ten)
+    .max(OneHundred)
     .required(),
   descriptionOffer: Joi.string()
-    .min(20)
-    .max(1024)
+    .min(Twenty)
+    .max(OneThousandTwentyFour)
     .required(),
   datePublication: Joi.string()
     .isoDate()
@@ -18,7 +33,7 @@ export const schemeCreateOffer = Joi.object({
   previewImage: Joi.string()
     .required(),
   photosHousing: Joi.array()
-    .length(6)
+    .length(Six)
     .required(),
   premium: Joi.boolean()
     .required(),
@@ -28,28 +43,28 @@ export const schemeCreateOffer = Joi.object({
     .valid('apartment', 'house', 'room', 'hotel')
     .required(),
   numberRooms: Joi.number()
-    .min(1)
-    .max(8)
+    .min(One)
+    .max(Eight)
     .required(),
   numberGuests: Joi.number()
-    .min(1)
-    .max(10)
+    .min(One)
+    .max(Ten)
     .required(),
   rentPrice: Joi.number()
-    .min(100)
-    .max(100000)
+    .min(OneHundred)
+    .max(OneHundredThousand)
     .required(),
   comforts: Joi.array()
     .items(
       Joi.string().valid('Breakfast', 'Air conditioning', 'Laptop friendly workspace', 'Baby seat', 'Washer', 'Towels', 'Fridge')
     )
-    .min(1)
-    .max(7)
+    .min(One)
+    .max(Sewen)
     .required(),
   authorOfOffer: Joi.object({
     name: Joi.string()
-      .min(1)
-      .max(15)
+      .min(One)
+      .max(Fifteen)
       .required(),
     email: Joi.string()
       .email()

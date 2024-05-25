@@ -9,7 +9,7 @@ export interface OfferServiceInterface {
   create(dto: CreateOfferDto): Promise<DocumentType<OfferEntity>>;
   updateById(offerId: string, dto: UpdateOfferDto): Promise<DocumentType<OfferEntity> | null>;
   deleteById(offerId: string): Promise<DocumentType<OfferEntity> | null>;
-  getOffersList(count?: string): Promise<DocumentType<OfferEntity>[] | null>;
+  getOffersList(count?: string): Promise<DocumentType<OfferEntity>[] | []>;
   findById(offerId: string | undefined): Promise<DocumentType<OfferEntity> | null>;
   findPremiumOffers(nameCity: CitiesList): Promise<DocumentType<OfferEntity>[] | null>;
 }
