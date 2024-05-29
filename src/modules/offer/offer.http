@@ -1,13 +1,13 @@
 # Предложения
 ## Создать новое предложение
-
 POST http://localhost:4000/offers/create HTTP/1.1
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiS29sZSIsImVtYWlsIjoiS29sZUBrb2wucnUiLCJpZCI6IjY2NTZlMzFmNjZkNjg4ZTQ5NDU0MTkwNiIsImlhdCI6MTcxNjk3ODg4NSwiZXhwIjoxNzE2OTc5NDg1fQ.nG-1KYrnPS5pIoPVMXiSB-ipu6q_ZjZXLxNLvh4k8kM
 
 {
-"denomination": "Star hotel",
+"denomination": "Birdie Village best hotel",
   "descriptionOffer": "This is hotel lacated in the city center near to the square of stars.",
-  "datePublication": "2024-05-04T21:00:00.000Z",
+  "datePublication": "2024-05-29T21:00:00.000Z",
   "city": "Amsterdam",
   "previewImage": "photo-room.jpg",
   "photosHousing": [
@@ -26,9 +26,9 @@ Content-Type: application/json
   "rentPrice": 12752,
   "comforts": ["Baby seat","Washer","Towels","Fridge"],
   "authorOfOffer": {
-    "name": "Alexs",
-    "email": "mmm@mm.ru",
-    "avatarUser": "yan34v.jpg",
+    "name": "Kole",
+    "email": "Kole@kol.ru",
+    "avatarUser": "Kole34.jpg",
     "typeUser": "ordinary"
   },
   "coordinates": {
@@ -38,13 +38,14 @@ Content-Type: application/json
 }
 
 ###
-## Редактирование предложения
 
-PATCH  http://localhost:4000/offers/redaction/66408fea33d03531efaf HTTP/1.1
+## Редактирование предложения
+PATCH  http://localhost:4000/offers/redaction/665609715a44c3285df4ea44 HTTP/1.1
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiS2lsZSIsImVtYWlsIjoiS2lsZUAyNC5ydSIsImlkIjoiNjY0ZjY1OTc1OGZjNzc3MGU2ODZiODg5IiwiaWF0IjoxNzE2OTEyNzQwLCJleHAiOjE3MTcwODU1NDB9.QgVOnhw_7oODCIxaJvkSj_Rvq5rYyU5UeivWUNctMSs
 
 {
-"denomination": "Star hotel",
+"denomination": "Rostov big Star hotel",
   "descriptionOffer": "This is hotel lacated in the city center near to the square of stars.",
   "datePublication": "2024-05-04T21:00:00.000Z",
   "city": "Paris",
@@ -65,8 +66,8 @@ Content-Type: application/json
   "rentPrice": 12752,
   "comforts": ["Washer","Towels","Fridge"],
   "authorOfOffer": {
-    "name": "Vlad",
-    "email": "v34yan@yan.ru",
+    "name": "Alexs",
+    "email": "Kile@24.ru",
     "avatarUser": "yan34v.jpg",
     "typeUser": "ordinary"
   },
@@ -77,34 +78,26 @@ Content-Type: application/json
 }
 
 ###
-## Удаление предложения
 
+## Удаление предложения
 DELETE http://localhost:4000/offers/delete/664af503f4a08beb5f8eab89 HTTP/1.1
 Content-Type: application/json
-
-{
-  "authorOfOffer": {
-    "name": "Vlad",
-    "email": "v34yan@yan.ru",
-    "avatarUser": "yan34v.jpg",
-    "typeUser": "ordinary"
-  }
-}
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiS2lsZSIsImVtYWlsIjoiS2lsZUAyNC5ydSIsImlkIjoiNjY0ZjY1OTc1OGZjNzc3MGU2ODZiODg5IiwiaWF0IjoxNzE2OTEyNzQwLCJleHAiOjE3MTcwODU1NDB9.QgVOnhw_7oODCIxaJvkSj_Rvq5rYyU5UeivWUNctMSs
 
 ###
-## Получение списка предложений
 
+## Получение списка предложений
 GET http://localhost:4000/offers/list?count=4 HTTP/1.1
 Content-Type: application/json
 
 ###
-## Получение детальной информации по предложению
 
+## Получение детальной информации по предложению
 GET http://localhost:4000/offers/offer/66408fea33d03531e7967faf HTTP/1.1
 Content-Type: application/json
 
 ###
-## Получение премиальных предложений для города
 
+## Получение премиальных предложений для города
 GET http://localhost:4000/offers/premium/Brussels HTTP/1.1
 Content-Type: application/json
