@@ -6,6 +6,7 @@ import {NameActions} from '../core/constants/index.js';
 type Message = {
     nameError: string;
     nameController: string;
+    statusCodes: number;
   };
 
 const getErrorMessage = (value: string, indicator: string) => {
@@ -46,6 +47,13 @@ const getErrorMessage = (value: string, indicator: string) => {
         nameController: FAVORITE_CONTROLLER
       };
       break;
+    case NameActions.CheckAuthenticate:
+      message = {
+        nameError: 'Unauthorized',
+        nameController: USER_CONTROLLER,
+        statusCodes: StatusCodes.UNAUTHORIZED
+      };
+      break;
   }
 
   return message;
@@ -53,10 +61,10 @@ const getErrorMessage = (value: string, indicator: string) => {
 
 export const getErrorConflict = (value: string, indicator: string) => {
   const errorMessage = getErrorMessage(value, indicator);
-  const {nameError, nameController} = errorMessage as Message;
+  const {nameError, nameController, statusCodes} = errorMessage as Message;
 
   throw new HttpError(
-    StatusCodes.CONFLICT,
+    statusCodes ?? StatusCodes.CONFLICT,
     nameError,
     nameController
   );

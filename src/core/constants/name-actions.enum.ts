@@ -3,5 +3,6 @@ export const NameActions = {
   CheckRegistrationUser: 'checkRegistrationUser',
   UpdateOffer: 'updateOffer',
   DeleteOffer: 'deleteOffer',
-  DeleteFavorite: 'deleteFavorite'
+  DeleteFavorite: 'deleteFavorite',
+  CheckAuthenticate: 'checkAuthenticate'
 } as const;

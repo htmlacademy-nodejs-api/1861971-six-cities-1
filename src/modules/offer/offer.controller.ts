@@ -35,8 +35,12 @@ import {CommentServiceInterface} from '../comment/index.js';
 import FavoriteService from '../favorite/favorite.service.js';
 import {
   ValidateObjectIdMiddleware,
-  ValidateDtoMiddleware
+  ValidateDtoMiddleware,
+  PrivateRouteMiddleware,
+  ParseTokenMiddleware
 } from '../../libs/middleware/index.js';
+import {ConfigInterface} from '../../core/config/index.js';
+import {RestSchema} from '../../core/types/index.js';
 
 @injectable()
 export class OfferController extends BaseController {
@@ -46,21 +50,30 @@ export class OfferController extends BaseController {
     @inject(AppComponent.OfferServiceInterface) private readonly offerService: OfferServiceInterface,
     @inject(AppComponent.CommentServiceInterface) private readonly commentService: CommentServiceInterface,
     @inject(AppComponent.FavoriteServiceInterface) private readonly favoriteService: FavoriteService,
+    @inject(AppComponent.ConfigInterface) private readonly configService: ConfigInterface<RestSchema>
   ) {
     super(logger);
     this.logger.info('Register routes for OfferController');
+    const authenticateMiddleware = new ParseTokenMiddleware(this.configService.get('JWT_ACCESS_SECRET'));
+    const privateRoute = new PrivateRouteMiddleware();
 
     this.addRoute({
       path: '/create',
       method: HttpMethod.Post,
       handler: this.create,
-      middlewares: [new ValidateDtoMiddleware(schemeCreateOffer)]
+      middlewares: [
+        authenticateMiddleware,
+        privateRoute,
+        new ValidateDtoMiddleware(schemeCreateOffer)
+      ]
     });
     this.addRoute({
       path: '/redaction/:offerId',
       method: HttpMethod.Patch,
       handler: this.update,
       middlewares: [
+        authenticateMiddleware,
+        privateRoute,
         new ValidateObjectIdMiddleware('offerId'),
         new ValidateDtoMiddleware(schemeUpdateOffer)
       ]
@@ -69,7 +82,11 @@ export class OfferController extends BaseController {
       path: '/delete/:offerId',
       method: HttpMethod.Delete,
       handler: this.delete,
-      middlewares: [new ValidateObjectIdMiddleware('offerId')]
+      middlewares: [
+        authenticateMiddleware,
+        privateRoute,
+        new ValidateObjectIdMiddleware('offerId')
+      ]
     });
     this.addRoute({ path: '/list', method: HttpMethod.Get, handler: this.index });
     this.addRoute({
@@ -82,13 +99,13 @@ export class OfferController extends BaseController {
   }
 
   public async create(
-    { body }: CreateOfferRequest,
+    { body, tokenPayload: {email} }: CreateOfferRequest,
     res: Response,
   ): Promise<void> {
-    const registrationUser = await this.userService.findByEmail(body.authorOfOffer.email);
+    const registrationUser = await this.userService.findByEmail(email);
 
     if (!registrationUser) {
-      getErrorConflict(body.authorOfOffer.email, NameActions.CheckRegistrationUser);
+      getErrorConflict(email, NameActions.CheckRegistrationUser);
     }
 
     const result = await this.offerService.create(body);
@@ -96,19 +113,19 @@ export class OfferController extends BaseController {
   }
 
   public async update(
-    { body, params:{offerId} }: Request<ParamOfferId, unknown, CreateOfferDto>,
+    { body, params:{offerId}, tokenPayload:{email} }: Request<ParamOfferId, unknown, CreateOfferDto>,
     res: Response,
   ): Promise<void> {
-    const registrationUser = await this.userService.findByEmail(body.authorOfOffer.email);
+    const registrationUser = await this.userService.findByEmail(email);
 
     if (!registrationUser) {
-      getErrorConflict(body.authorOfOffer.email, NameActions.CheckRegistrationUser);
+      getErrorConflict(email, NameActions.CheckRegistrationUser);
     }
 
     const dataOffer = await this.offerService.findById(offerId);
 
-    if(dataOffer?.authorOfOffer.email !== body.authorOfOffer.email) {
-      getErrorConflict(body.authorOfOffer.email, NameActions.UpdateOffer);
+    if(dataOffer?.authorOfOffer.email !== email) {
+      getErrorConflict(email, NameActions.UpdateOffer);
     }
 
     const result = await this.offerService.updateById(offerId, body);
@@ -116,19 +133,19 @@ export class OfferController extends BaseController {
   }
 
   public async delete(
-    { body, params:{offerId} }: Request<ParamOfferId, unknown, CreateOfferDto>,
+    { params:{offerId}, tokenPayload:{email} }: Request<ParamOfferId, unknown, CreateOfferDto>,
     res: Response,
   ): Promise<void> {
-    const registrationUser = await this.userService.findByEmail(body.authorOfOffer.email);
+    const registrationUser = await this.userService.findByEmail(email);
 
     if (!registrationUser) {
-      getErrorConflict(body.authorOfOffer.email, NameActions.CheckRegistrationUser);
+      getErrorConflict(email, NameActions.CheckRegistrationUser);
     }
 
     const dataOffer = await this.offerService.findById(offerId);
 
-    if(dataOffer?.authorOfOffer.email !== body.authorOfOffer.email) {
-      getErrorConflict(body.authorOfOffer.email, NameActions.DeleteOffer);
+    if(dataOffer?.authorOfOffer.email !== email) {
+      getErrorConflict(email, NameActions.DeleteOffer);
     }
 
     await this.commentService.deleteById(offerId);

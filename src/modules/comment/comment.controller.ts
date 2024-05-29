@@ -9,9 +9,15 @@ import {
 
 import {BaseController} from '../../libs/controller/index.js';
 import {HttpMethod} from '../../libs/constants/index.js';
-import { AppComponent } from '../../core/constants/index.js';
+import {
+  AppComponent,
+  NameActions
+} from '../../core/constants/index.js';
 import { LoggerInterface } from '../../core/logger/index.js';
-import { excludeExtraneousValues } from '../../helpers/index.js';
+import {
+  excludeExtraneousValues,
+  getErrorConflict
+} from '../../helpers/index.js';
 import {
   CommentServiceInterface,
   shemeCreatComment
@@ -21,14 +27,21 @@ import CommentRdo from './rdo/comment.rdo.js';
 import CreateCommentDto from './dto/create-comment.dto.js';
 import {
   ValidateObjectIdMiddleware,
-  ValidateDtoMiddleware
+  ValidateDtoMiddleware,
+  PrivateRouteMiddleware,
+  ParseTokenMiddleware
 } from '../../libs/middleware/index.js';
+import {UserServiceInterface} from '../user/index.js';
+import {ConfigInterface} from '../../core/config/index.js';
+import {RestSchema} from '../../core/types/index.js';
 
 @injectable()
 export class CommentController extends BaseController {
   constructor(
     @inject(AppComponent.LoggerInterface) protected readonly logger: LoggerInterface,
-    @inject(AppComponent.CommentServiceInterface) protected readonly commentService: CommentServiceInterface
+    @inject(AppComponent.CommentServiceInterface) protected readonly commentService: CommentServiceInterface,
+    @inject(AppComponent.UserServiceInterface) private readonly userService: UserServiceInterface,
+    @inject(AppComponent.ConfigInterface) private readonly configService: ConfigInterface<RestSchema>
   ) {
     super(logger);
     this.logger.info('Register routes for CommentController…');
@@ -44,6 +57,8 @@ export class CommentController extends BaseController {
       method: HttpMethod.Post,
       handler: this.creat,
       middlewares: [
+        new ParseTokenMiddleware(this.configService.get('JWT_ACCESS_SECRET')),
+        new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware('offerId'),
         new ValidateDtoMiddleware(shemeCreatComment)
       ]
@@ -51,9 +66,14 @@ export class CommentController extends BaseController {
   }
 
   public async creat(
-    {body, params:{offerId} }: Request<ParamOfferId, unknown, CreateCommentDto>,
+    {body, params:{offerId}, tokenPayload:{email} }: Request<ParamOfferId, unknown, CreateCommentDto>,
     res: Response,
   ): Promise<void> {
+    const registrationUser = await this.userService.findByEmail(email);
+
+    if (!registrationUser) {
+      getErrorConflict(email, NameActions.CheckRegistrationUser);
+    }
 
     const dataComment = await this.commentService.create({
       ...body,

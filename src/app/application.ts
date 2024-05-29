@@ -22,7 +22,9 @@ export default class Application {
     @inject(AppComponent.UserController) private readonly userController: Controller,
     @inject(AppComponent.OfferController) private readonly offerController: Controller,
     @inject(AppComponent.FavoriteController) private readonly favoriteController: Controller,
-    @inject(AppComponent.CommentController) private readonly commentController: Controller
+    @inject(AppComponent.CommentController) private readonly commentController: Controller,
+    @inject(AppComponent.RefreshTokenController) private readonly refreshTokenController: Controller,
+    @inject(AppComponent.AuthExceptionFilter) private readonly authExceptionFilter: ExceptionFilter
   ) {
     this.server = express();
   }
@@ -45,9 +47,10 @@ export default class Application {
 
   private async _initControllers() {
     this.server.use('/users', this.userController.router);
-    this.server.use('/offers', this.offerController.router);
+    this.server.use('/offers',this.offerController.router);
     this.server.use('/favorite', this.favoriteController.router);
     this.server.use('/comments', this.commentController.router);
+    this.server.use('/refresh', this.refreshTokenController.router);
   }
 
   private async _initMiddleware() {
@@ -59,6 +62,7 @@ export default class Application {
   }
 
   private async _initExceptionFilters() {
+    this.server.use(this.authExceptionFilter.catch.bind(this.authExceptionFilter));
     this.server.use(this.appExceptionFilter.catch.bind(this.appExceptionFilter));
   }
 
