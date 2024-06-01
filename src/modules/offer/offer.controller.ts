@@ -19,7 +19,7 @@ import {
   OfferServiceInterface,
   CreateOfferRequest,
   ParamOfferId,
-  OfferEntity,
+  //OfferEntity,
   schemeCreateOffer,
   schemeUpdateOffer
 } from './index.js';
@@ -29,7 +29,7 @@ import {
 } from '../../helpers/index.js';
 import CreateOfferDto from './dto/create-offer.dto.js';
 import OfferRdo from './rdo/offer.rdo.js';
-import OffersListRdo from './rdo/offers-list.rdo.js';
+//import OffersListRdo from './rdo/offers-list.rdo.js';
 import {CitiesList} from '../../core/types/index.js';
 import {CommentServiceInterface} from '../comment/index.js';
 import FavoriteService from '../favorite/favorite.service.js';
@@ -155,10 +155,11 @@ export class OfferController extends BaseController {
 
   public async index(
     { query: {count} }: CreateOfferRequest,
-    res: Response,
+    _res: Response,
   ): Promise<void> {
     const offersList = await this.offerService.getOffersList(count as string | undefined);
-
+    console.log(offersList);
+    /*
     const result: OfferEntity[] = [];
     for await (const offer of offersList) {
 
@@ -181,6 +182,7 @@ export class OfferController extends BaseController {
     }
 
     this.ok(res, excludeExtraneousValues(OffersListRdo, result));
+    */
   }
 
   public async show (

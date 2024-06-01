@@ -49,10 +49,37 @@ export default class OfferService implements OfferServiceInterface {
     const limit = count ?? DefaultValues.OfferCount;
 
     return this.offerModel
+      .aggregate([
+        {
+          $lookup:{
+            from: 'favorites',
+            pipeline: [
+              { $project:
+                {
+                  _id: 0,
+                  offer: 1,
+                  email: 1
+                }
+              }
+            ],
+            as: 'favorites'
+          }
+        },
+        { $addFields:
+          { favorites: { $in: [
+            { $and: [ '$id' ] },
+            '$favorites'
+          ] } }
+        },
+        { $sort: {datePublication: SortType.Down} },
+        { $limit: Number(limit)}
+      ]).exec();
+    /*
       .find()
       .sort({datePublication: SortType.Down})
       .limit(Number(limit))
       .exec();
+      */
   }
 
   public async findById(offerId: string): Promise<DocumentType<OfferEntity> | null> {
