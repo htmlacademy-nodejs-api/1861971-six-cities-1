@@ -8,9 +8,7 @@ import { SignJWT } from 'jose';
 import {
   AuthService,
   TokenPayload,
-  JWT_ALGORITHM,
-  JWT_TYP,
-  JWT_EXPIRED,
+  DataJWTList
 } from './index.js';
 import {AppComponent} from '../../core/constants/index.js';
 import {LoggerInterface} from '../../core/logger/index.js';
@@ -46,11 +44,11 @@ export class DefaultAuthService implements AuthService {
     this.logger.info(`Create token for ${user.email}`);
     return new SignJWT(tokenPayload)
       .setProtectedHeader({
-        alg: JWT_ALGORITHM,
-        typ: JWT_TYP
+        alg: DataJWTList.JWT_ALGORITHM,
+        typ: DataJWTList.JWT_TYP
       })
       .setIssuedAt()
-      .setExpirationTime(JWT_EXPIRED)
+      .setExpirationTime(DataJWTList.JWT_EXPIRED)
       .sign(secretKey);
   }
 

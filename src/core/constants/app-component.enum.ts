@@ -16,8 +16,11 @@ export const AppComponent = {
   FavoriteController: Symbol.for('FavoriteController'),
   CommentController: Symbol.for('CommentController'),
   ExceptionFilter: Symbol.for('ExceptionFilter'),
+  HttpExceptionFilter: Symbol.for('HttpExceptionFilter'),
+  ValidationExceptionFilter: Symbol.for('ValidationExceptionFilter'),
   AuthService: Symbol.for('AuthService'),
   AuthExceptionFilter: Symbol.for('AuthExceptionFilter'),
   RefreshTokenService: Symbol.for('RefreshTokenService'),
-  RefreshTokenController: Symbol.for('RefreshTokenController')
+  RefreshTokenController: Symbol.for('RefreshTokenController'),
+  PathTransformer: Symbol.for('PathTransformer'),
 } as const;

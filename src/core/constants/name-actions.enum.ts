@@ -4,5 +4,6 @@ export const NameActions = {
   UpdateOffer: 'updateOffer',
   DeleteOffer: 'deleteOffer',
   DeleteFavorite: 'deleteFavorite',
-  CheckAuthenticate: 'checkAuthenticate'
+  CheckAuthenticate: 'checkAuthenticate',
+  UpdateUser: 'updateUser'
 } as const;

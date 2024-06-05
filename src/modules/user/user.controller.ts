@@ -29,6 +29,7 @@ import {
 } from '../../helpers/index.js';
 import UserRdo from './rdo/user.rdo.js';
 import LoggedUserRdo from './rdo/logged-user.rdo.js';
+import UploadUserAvatarRdo from './rdo/upload-user-avatar.rdo.js';
 import {
   ValidateDtoMiddleware,
   ValidateObjectIdMiddleware,
@@ -108,10 +109,17 @@ export class UserController extends BaseController {
   }
 
   public async uploadAvatar(
-    {file}: Request,
+    {params:{userId}, file}: Request,
     res: Response
   ) {
-    this.created(res, {filepath: file?.path});
+    const uploadFile = { avatarUser: file?.filename };
+
+    const dataUsre = await this.userService.updateById(userId, uploadFile);
+    if (!dataUsre) {
+      getErrorConflict(userId, NameActions.UpdateUser);
+    }
+
+    this.created(res, excludeExtraneousValues(UploadUserAvatarRdo, {fileNameAvatar: uploadFile.avatarUser}));
   }
 
   public async checkAuthenticate(

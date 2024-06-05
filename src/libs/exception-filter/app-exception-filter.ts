@@ -13,7 +13,7 @@ import { ExceptionFilter } from './exception-filter.interface.js';
 import { LoggerInterface } from '../../core/logger/index.js';
 import { AppComponent } from '../../core/constants/index.js';
 import { createErrorObject } from '../../helpers/index.js';
-import { HttpError } from '../errors/index.js';
+import {ApplicationError} from '../types/index.js';
 
 @injectable()
 export class AppExceptionFilter implements ExceptionFilter {
@@ -23,25 +23,10 @@ export class AppExceptionFilter implements ExceptionFilter {
     this.logger.info('Register AppExceptionFilter');
   }
 
-  private handleHttpError(error: HttpError, _req: Request, res: Response, _next: NextFunction) {
-    this.logger.error(`[${error.detail}]: ${error.httpStatusCode}  ${error.message}`, error);
-    res
-      .status(error.httpStatusCode)
-      .json(createErrorObject(error.message));
-  }
-
-  private handleOtherError(error: Error, _req: Request, res: Response, _next: NextFunction) {
+  public catch(error: Error, _req: Request, res: Response, _next: NextFunction): void {
     this.logger.error(error.message, error);
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json(createErrorObject(error.message));
-  }
-
-  public catch(error: Error | HttpError, req: Request, res: Response, next: NextFunction): void {
-    if (error instanceof HttpError) {
-      return this.handleHttpError(error, req, res, next);
-    }
-
-    this.handleOtherError(error, req, res, next);
+      .json(createErrorObject(ApplicationError.ServiceError, error.message));
   }
 }

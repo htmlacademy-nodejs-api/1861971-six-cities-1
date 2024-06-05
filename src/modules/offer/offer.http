@@ -2,14 +2,14 @@
 ## Создать новое предложение
 POST http://localhost:4000/offers/create HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiS29sZSIsImVtYWlsIjoiS29sZUBrb2wucnUiLCJpZCI6IjY2NTZlMzFmNjZkNjg4ZTQ5NDU0MTkwNiIsImlhdCI6MTcxNjk3ODg4NSwiZXhwIjoxNzE2OTc5NDg1fQ.nG-1KYrnPS5pIoPVMXiSB-ipu6q_ZjZXLxNLvh4k8kM
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiVmxhZCIsImVtYWlsIjoidmxhZEB2LnJ1IiwiaWQiOiI2NjVmMDMyZDE0OTgzOTk4MDI2YTFkZjkiLCJpYXQiOjE3MTc1NjY2MDcsImV4cCI6MTcxNzU2NzIwN30.MC1MegFKjks71TTjIJqOOwqavlkSX65H2QsnIsQjZX4
 
 {
-"denomination": "Birdie Village best hotel",
+"denomination": "Hotel Volgograd",
   "descriptionOffer": "This is hotel lacated in the city center near to the square of stars.",
   "datePublication": "2024-05-29T21:00:00.000Z",
-  "city": "Amsterdam",
-  "previewImage": "photo-room.jpg",
+  "city": "Paris",
+  "previewImage": "img/room.jpg",
   "photosHousing": [
     "photo-1.jpg",
     "photo-2.jpg",
@@ -26,9 +26,9 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiS29sZSIsI
   "rentPrice": 12752,
   "comforts": ["Baby seat","Washer","Towels","Fridge"],
   "authorOfOffer": {
-    "name": "Kole",
-    "email": "Kole@kol.ru",
-    "avatarUser": "Kole34.jpg",
+    "name": "Vlad",
+    "email": "vlad@v.ru",
+    "avatarUser": "fadfaa3d-04a2-401e-809c-46c26145bec4.png",
     "typeUser": "ordinary"
   },
   "coordinates": {
@@ -40,16 +40,16 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiS29sZSIsI
 ###
 
 ## Редактирование предложения
-PATCH  http://localhost:4000/offers/redaction/665609715a44c3285df4ea44 HTTP/1.1
+PATCH  http://localhost:4000/offers/redaction/665f059114983998026a1dfe HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiS2lsZSIsImVtYWlsIjoiS2lsZUAyNC5ydSIsImlkIjoiNjY0ZjY1OTc1OGZjNzc3MGU2ODZiODg5IiwiaWF0IjoxNzE2OTEyNzQwLCJleHAiOjE3MTcwODU1NDB9.QgVOnhw_7oODCIxaJvkSj_Rvq5rYyU5UeivWUNctMSs
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiVmxhZCIsImVtYWlsIjoidmxhZEB2LnJ1IiwiaWQiOiI2NjVmMDMyZDE0OTgzOTk4MDI2YTFkZjkiLCJpYXQiOjE3MTc1NzU3OTcsImV4cCI6MTcxNzU3NjM5N30.2FRR27L1Zg0HxgtJULBLMhLwLLyxPtLEcB_b9kfTtF4
 
 {
-"denomination": "Rostov big Star hotel",
+"denomination": "Hotel Volgograd Star",
   "descriptionOffer": "This is hotel lacated in the city center near to the square of stars.",
-  "datePublication": "2024-05-04T21:00:00.000Z",
+  "datePublication": "2024-05-29T21:00:00.000Z",
   "city": "Paris",
-  "previewImage": "photo-room.jpg",
+  "previewImage": "img/room.jpg",
   "photosHousing": [
     "photo-1.jpg",
     "photo-2.jpg",
@@ -64,11 +64,11 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiS2lsZSIsI
   "numberRooms": 6,
   "numberGuests": 9,
   "rentPrice": 12752,
-  "comforts": ["Washer","Towels","Fridge"],
+  "comforts": ["Baby seat","Washer","Towels","Fridge"],
   "authorOfOffer": {
-    "name": "Alexs",
-    "email": "Kile@24.ru",
-    "avatarUser": "yan34v.jpg",
+    "name": "Vlad",
+    "email": "vlad@v.ru",
+    "avatarUser": "fadfaa3d-04a2-401e-809c-46c26145bec4.png",
     "typeUser": "ordinary"
   },
   "coordinates": {

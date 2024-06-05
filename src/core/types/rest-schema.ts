@@ -6,6 +6,8 @@ export type RestSchema = {
   DB_HOST: string,
   DB_PORT: string,
   UPLOAD_DIRECTORY: string,
+  STATIC_DIRECTORY_PATH: string,
   JWT_ACCESS_SECRET: string,
-  JWT_REFRESH_SECRET: string
+  JWT_REFRESH_SECRET: string,
+  HOST: string
 };

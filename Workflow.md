@@ -20,6 +20,9 @@ npm install
 `SOLT=password` - Секркт для создания хэша.
 `DB_PORT=20047` - Связывает и прослушивает соединения на указанном порту. Для старта базы данных.
 `UPLOAD_DIRECTORY=C:\Users\User\Desktop\1861971-six-cities-1\uploaded-files` - Путь к директории для хранения пользовательских файлов.
+`STATIC_DIRECTORY_PATH=C:\Users\User\Desktop\1861971-six-cities-1\static` - Путь к директории для хранения файлов по умолчанию.
+`JWT_ACCESS_SECRET=Che_Guevara` - Секркт для создания подписи для accessToken.
+`JWT_REFRESH_SECRET=Alberto` - Секркт для создания подписи для refreshToken.
 
 ### Сценарии
 

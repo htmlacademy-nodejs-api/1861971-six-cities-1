@@ -1,14 +1,22 @@
 import {injectable, inject} from 'inversify';
 import express, { Express } from 'express';
+import cors from 'cors';
 
 import {LoggerInterface} from '../core/logger/index.js';
 import {ConfigInterface} from '../core/config/index.js';
 import {DatabaseClientInterface} from '../core/database-client/index.js';
 import {RestSchema} from '../core/types/index.js';
 import {AppComponent} from '../core/constants/index.js';
-import {getMongoURI} from '../helpers/index.js';
+import {
+  getMongoURI,
+  getFullServerPath
+} from '../helpers/index.js';
 import {ExceptionFilter} from '../libs/exception-filter/index.js';
 import {Controller} from '../libs/controller/index.js';
+import {
+  STATIC_UPLOAD_ROUTE,
+  STATIC_FILES_ROUTE
+} from './index.js';
 
 @injectable()
 export default class Application {
@@ -19,6 +27,8 @@ export default class Application {
     @inject(AppComponent.ConfigInterface) private readonly config: ConfigInterface<RestSchema>,
     @inject(AppComponent.DatabaseClientInterface) private readonly databaseClient: DatabaseClientInterface,
     @inject(AppComponent.ExceptionFilter) private readonly appExceptionFilter: ExceptionFilter,
+    @inject(AppComponent.HttpExceptionFilter) private readonly httpExceptionFilter: ExceptionFilter,
+    @inject(AppComponent.ValidationExceptionFilter) private readonly validationExceptionFilter: ExceptionFilter,
     @inject(AppComponent.UserController) private readonly userController: Controller,
     @inject(AppComponent.OfferController) private readonly offerController: Controller,
     @inject(AppComponent.FavoriteController) private readonly favoriteController: Controller,
@@ -56,13 +66,20 @@ export default class Application {
   private async _initMiddleware() {
     this.server.use(express.json());
     this.server.use(
-      '/upload',
+      STATIC_UPLOAD_ROUTE,
       express.static(this.config.get('UPLOAD_DIRECTORY'))
     );
+    this.server.use(
+      STATIC_FILES_ROUTE,
+      express.static(this.config.get('STATIC_DIRECTORY_PATH'))
+    );
+    this.server.use(cors());
   }
 
   private async _initExceptionFilters() {
     this.server.use(this.authExceptionFilter.catch.bind(this.authExceptionFilter));
+    this.server.use(this.validationExceptionFilter.catch.bind(this.validationExceptionFilter));
+    this.server.use(this.httpExceptionFilter.catch.bind(this.httpExceptionFilter));
     this.server.use(this.appExceptionFilter.catch.bind(this.appExceptionFilter));
   }
 
@@ -87,6 +104,6 @@ export default class Application {
 
     this.logger.info('Try to init server');
     await this._initServer();
-    this.logger.info(`Server started on http://localhost:${this.config.get('PORT')}`);
+    this.logger.info(`Server started on ${getFullServerPath(this.config.get('HOST'), this.config.get('PORT'))}`);
   }
 }

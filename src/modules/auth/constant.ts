@@ -1,3 +1,6 @@
-export const JWT_ALGORITHM = 'HS256';
-export const JWT_TYP = 'JWT';
-export const JWT_EXPIRED = '10m';
+export const DataJWTList = {
+  JWT_ALGORITHM: 'HS256',
+  JWT_TYP: 'JWT',
+  JWT_EXPIRED: '10m',
+  JWT_REFRESH_EXPIRED: '1d'
+} as const;
