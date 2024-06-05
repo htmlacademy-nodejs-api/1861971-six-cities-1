@@ -11,8 +11,11 @@ import {RestSchema} from '../core/types/index.js';
 import {AppComponent} from '../core/constants/index.js';
 import {
   ExceptionFilter,
-  AppExceptionFilter
+  AppExceptionFilter,
+  HttpErrorExceptionFilter,
+  ValidationExceptionFilter
 } from '../libs/exception-filter/index.js';
+import {PathTransformer} from '../libs/transform/index.js';
 
 export function createApplicationContainer() {
   const applicationContainer = new Container();
@@ -21,6 +24,9 @@ export function createApplicationContainer() {
   applicationContainer.bind<ConfigInterface<RestSchema>>(AppComponent.ConfigInterface).to(ConfigService).inSingletonScope();
   applicationContainer.bind<DatabaseClientInterface>(AppComponent.DatabaseClientInterface).to(MongoClientService).inSingletonScope();
   applicationContainer.bind<ExceptionFilter>(AppComponent.ExceptionFilter).to(AppExceptionFilter).inSingletonScope();
+  applicationContainer.bind<ExceptionFilter>(AppComponent.HttpExceptionFilter).to(HttpErrorExceptionFilter).inSingletonScope();
+  applicationContainer.bind<ExceptionFilter>(AppComponent.ValidationExceptionFilter).to(ValidationExceptionFilter).inSingletonScope();
+  applicationContainer.bind<PathTransformer>(AppComponent.PathTransformer).to(PathTransformer).inSingletonScope();
 
   return applicationContainer;
 }

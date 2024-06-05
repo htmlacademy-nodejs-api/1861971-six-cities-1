@@ -54,6 +54,12 @@ const getErrorMessage = (value: string, indicator: string) => {
         statusCodes: StatusCodes.UNAUTHORIZED
       };
       break;
+    case NameActions.UpdateUser:
+      message = {
+        nameError: `User with id: ${value} does not exist.`,
+        nameController: USER_CONTROLLER
+      };
+      break;
   }
 
   return message;

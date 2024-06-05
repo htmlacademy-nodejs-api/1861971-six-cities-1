@@ -158,7 +158,6 @@ export class OfferController extends BaseController {
     res: Response,
   ): Promise<void> {
     const offersList = await this.offerService.getOffersList(count as string | undefined);
-
     const result: OfferEntity[] = [];
     for await (const offer of offersList) {
 

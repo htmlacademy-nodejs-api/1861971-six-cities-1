@@ -14,8 +14,7 @@ import {ConfigInterface} from '../../core/config/index.js';
 import {RestSchema} from '../../core/types/index.js';
 import {
   TokenPayload,
-  JWT_ALGORITHM,
-  JWT_TYP
+  DataJWTList
 } from '../auth/index.js';
 import {UserEntity} from '../user/index.js';
 
@@ -38,10 +37,11 @@ export class DefaultRefreshTokenService implements RefreshTokenService {
     this.logger.info(`Create refreshToken for ${user.email}`);
     return new SignJWT(tokenPayload)
       .setProtectedHeader({
-        alg: JWT_ALGORITHM,
-        typ: JWT_TYP
+        alg: DataJWTList.JWT_ALGORITHM,
+        typ: DataJWTList.JWT_TYP
       })
       .setIssuedAt()
+      .setExpirationTime(DataJWTList.JWT_REFRESH_EXPIRED)
       .sign(secretKey);
   }
 }
