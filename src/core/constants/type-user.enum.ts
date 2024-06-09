@@ -1,4 +1,4 @@
 export const TypeUser = {
-  Ordinary: 'ordinary',
+  Ordinary: 'regular',
   Pro: 'pro'
 } as const;

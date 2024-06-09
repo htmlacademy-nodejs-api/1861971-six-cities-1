@@ -29,7 +29,7 @@ import {
 } from '../../helpers/index.js';
 import CreateOfferDto from './dto/create-offer.dto.js';
 import OfferRdo from './rdo/offer.rdo.js';
-import OffersListRdo from './rdo/offers-list.rdo.js';
+import UserRdo from '../user/rdo/user.rdo.js';
 import {CitiesList} from '../../core/types/index.js';
 import {CommentServiceInterface} from '../comment/index.js';
 import FavoriteService from '../favorite/favorite.service.js';
@@ -41,6 +41,7 @@ import {
 } from '../../libs/middleware/index.js';
 import {ConfigInterface} from '../../core/config/index.js';
 import {RestSchema} from '../../core/types/index.js';
+import {TypeUserList} from '../../core/types/index.js';
 
 @injectable()
 export class OfferController extends BaseController {
@@ -95,7 +96,7 @@ export class OfferController extends BaseController {
       handler: this.show,
       middlewares: [new ValidateObjectIdMiddleware('offerId')]
     });
-    this.addRoute({ path: '/premium/:nameCity', method: HttpMethod.Get, handler: this.getPremiumList });
+    this.addRoute({ path: '/premium', method: HttpMethod.Get, handler: this.getPremiumList });
   }
 
   public async create(
@@ -108,7 +109,17 @@ export class OfferController extends BaseController {
       getErrorConflict(email, NameActions.CheckRegistrationUser);
     }
 
-    const result = await this.offerService.create(body);
+    const dataUser = excludeExtraneousValues(UserRdo, registrationUser);
+
+    const result = await this.offerService.create({
+      ...body,
+      authorOfOffer: {
+        name: dataUser.name,
+        email: dataUser.email,
+        avatarUser: dataUser.avatarUser,
+        typeUser: dataUser.typeUser as TypeUserList
+      }
+    });
     this.created(res, excludeExtraneousValues(OfferRdo, result));
   }
 
@@ -172,14 +183,15 @@ export class OfferController extends BaseController {
       if(dataFavorit) {
         result.push({
           ...offer?.toObject(),
-          favorites: true
+          favorites: true,
+          id: offer.id
         });
       }else{
         result.push(offer);
       }
     }
 
-    this.ok(res, excludeExtraneousValues(OffersListRdo, result));
+    this.ok(res, excludeExtraneousValues(OfferRdo, result));
   }
 
   public async show (
@@ -219,7 +231,8 @@ export class OfferController extends BaseController {
     if(dataFavorit) {
       const result = {
         ...newOffer?.toObject(),
-        favorites: true
+        favorites: true,
+        id: offerId
       };
       this.ok(res, excludeExtraneousValues(OfferRdo, result));
       return;
@@ -229,7 +242,7 @@ export class OfferController extends BaseController {
   }
 
   public async getPremiumList(
-    { params:{nameCity} }: CreateOfferRequest,
+    { query:{nameCity} }: CreateOfferRequest,
     res: Response,
   ): Promise<void> {
     const result = await this.offerService.findPremiumOffers(nameCity as CitiesList);

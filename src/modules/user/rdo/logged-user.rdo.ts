@@ -5,5 +5,17 @@ export default class LoggedUserRdo {
   public token!: string;
 
   @Expose()
-    refreshToken!: string;
+  public refreshToken!: string;
+
+  @Expose()
+  public name!: string ;
+
+  @Expose()
+  public email!: string;
+
+  @Expose()
+  public avatarUser!: string;
+
+  @Expose()
+  public typeUser!: string;
 }

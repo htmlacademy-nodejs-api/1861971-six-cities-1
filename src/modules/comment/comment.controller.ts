@@ -24,7 +24,6 @@ import {
 } from './index.js';
 import {ParamOfferId} from '../offer/index.js';
 import CommentRdo from './rdo/comment.rdo.js';
-import CreateCommentDto from './dto/create-comment.dto.js';
 import {
   ValidateObjectIdMiddleware,
   ValidateDtoMiddleware,
@@ -53,7 +52,7 @@ export class CommentController extends BaseController {
       middlewares: [new ValidateObjectIdMiddleware('offerId')]
     });
     this.addRoute({
-      path: '/creat/:offerId',
+      path: '/create/:offerId',
       method: HttpMethod.Post,
       handler: this.creat,
       middlewares: [
@@ -66,7 +65,7 @@ export class CommentController extends BaseController {
   }
 
   public async creat(
-    {body, params:{offerId}, tokenPayload:{email} }: Request<ParamOfferId, unknown, CreateCommentDto>,
+    {body, params:{offerId}, tokenPayload:{email, id} }: Request<ParamOfferId, unknown, { comment: string, rating: number }>,
     res: Response,
   ): Promise<void> {
     const registrationUser = await this.userService.findByEmail(email);
@@ -76,8 +75,11 @@ export class CommentController extends BaseController {
     }
 
     const dataComment = await this.commentService.create({
-      ...body,
-      offerId
+      text: body.comment,
+      rating: body.rating,
+      authorOfOffer: id,
+      offerId: offerId,
+      datePublication: ''
     });
     this.ok(res, excludeExtraneousValues(CommentRdo, dataComment));
   }

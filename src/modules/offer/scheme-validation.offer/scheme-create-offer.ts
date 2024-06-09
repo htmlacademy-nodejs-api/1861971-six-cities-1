@@ -11,8 +11,7 @@ const {
   One,
   Eight,
   OneHundredThousand,
-  Sewen,
-  Fifteen,
+  Sewen
 } = Value;
 
 export const schemeCreateOffer = Joi.object({
@@ -23,9 +22,6 @@ export const schemeCreateOffer = Joi.object({
   descriptionOffer: Joi.string()
     .min(Twenty)
     .max(OneThousandTwentyFour)
-    .required(),
-  datePublication: Joi.string()
-    .isoDate()
     .required(),
   city: Joi.string()
     .valid('Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf')
@@ -60,20 +56,6 @@ export const schemeCreateOffer = Joi.object({
     )
     .min(One)
     .max(Sewen)
-    .required(),
-  authorOfOffer: Joi.object({
-    name: Joi.string()
-      .min(One)
-      .max(Fifteen)
-      .required(),
-    email: Joi.string()
-      .email()
-      .required(),
-    avatarUser: Joi.string(),
-    typeUser: Joi.string()
-      .valid('ordinary', 'pro')
-      .required()
-  })
     .required(),
   coordinates: Joi.object({
     latitude: Joi.number()
