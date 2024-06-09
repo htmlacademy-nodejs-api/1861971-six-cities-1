@@ -48,7 +48,7 @@ export class DefaultAuthService implements AuthService {
         typ: DataJWTList.JWT_TYP
       })
       .setIssuedAt()
-      .setExpirationTime(DataJWTList.JWT_EXPIRED)
+      .setExpirationTime(DataJWTList.JWT_REFRESH_EXPIRED)
       .sign(secretKey);
   }
 

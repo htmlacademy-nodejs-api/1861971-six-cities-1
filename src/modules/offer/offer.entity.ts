@@ -40,6 +40,7 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   public descriptionOffer!: string;
 
   @prop({
+    default: new Date().toISOString(),
     required: true
   })
   public datePublication!: string;

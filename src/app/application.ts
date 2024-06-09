@@ -58,7 +58,7 @@ export default class Application {
   private async _initControllers() {
     this.server.use('/users', this.userController.router);
     this.server.use('/offers',this.offerController.router);
-    this.server.use('/favorite', this.favoriteController.router);
+    this.server.use('/favorites', this.favoriteController.router);
     this.server.use('/comments', this.commentController.router);
     this.server.use('/refresh', this.refreshTokenController.router);
   }

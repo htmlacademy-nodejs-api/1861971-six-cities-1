@@ -28,7 +28,6 @@ import {
   getErrorConflict
 } from '../../helpers/index.js';
 import UserRdo from './rdo/user.rdo.js';
-import LoggedUserRdo from './rdo/logged-user.rdo.js';
 import UploadUserAvatarRdo from './rdo/upload-user-avatar.rdo.js';
 import {
   ValidateDtoMiddleware,
@@ -82,6 +81,15 @@ export class UserController extends BaseController {
         new PrivateRouteMiddleware()
       ]
     });
+    this.addRoute({
+      path: '/logout',
+      method: HttpMethod.Delete,
+      handler: this.logout,
+      middlewares: [
+        new ParseTokenMiddleware(this.configService.get('JWT_ACCESS_SECRET')),
+        new PrivateRouteMiddleware()
+      ]
+    });
   }
 
   public async create(
@@ -105,7 +113,9 @@ export class UserController extends BaseController {
     const user = await this.authService.verify(body);
     const token = await this.authService.authenticate(user);
     const refreshToken = await this.refreshTokenService.authenticate(user);
-    this.ok(res, excludeExtraneousValues(LoggedUserRdo, {token, refreshToken}));
+
+    const dataUser = excludeExtraneousValues(UserRdo, user);
+    this.ok(res, Object.assign(dataUser, {token, refreshToken}));
   }
 
   public async uploadAvatar(
@@ -119,7 +129,7 @@ export class UserController extends BaseController {
       getErrorConflict(userId, NameActions.UpdateUser);
     }
 
-    this.created(res, excludeExtraneousValues(UploadUserAvatarRdo, {fileNameAvatar: uploadFile.avatarUser}));
+    this.created(res, excludeExtraneousValues(UploadUserAvatarRdo, {avatarUser: uploadFile.avatarUser}));
   }
 
   public async checkAuthenticate(
@@ -130,6 +140,19 @@ export class UserController extends BaseController {
 
     if (!user) {
       getErrorConflict(email, NameActions.CheckAuthenticate);
+    }
+
+    this.ok(res, excludeExtraneousValues(UserRdo, user));
+  }
+
+  public async logout(
+    { tokenPayload: { email }}: Request,
+    res: Response
+  ) {
+    const user = await this.userService.findByEmail(email);
+
+    if (!user) {
+      getErrorConflict(email, NameActions.CheckRegistrationUser);
     }
 
     this.ok(res, excludeExtraneousValues(UserRdo, user));

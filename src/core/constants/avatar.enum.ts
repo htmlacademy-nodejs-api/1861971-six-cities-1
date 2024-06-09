@@ -1,4 +1,4 @@
 export const Avatar = {
   Empty: ' ',
-  Default: 'avatar.png'
+  Default: 'avatar-max.jpg'
 } as const;

@@ -23,6 +23,6 @@ export const schemeUser = Joi.object({
     .max(Twelve)
     .required(),
   typeUser: Joi.string()
-    .valid('ordinary', 'pro')
+    .valid('regular', 'pro')
     .required()
 });

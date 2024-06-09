@@ -20,7 +20,7 @@ import {
   OfferEntity,
   ParamOfferId
 } from '../offer/index.js';
-import OffersListRdo from '../offer/rdo/offers-list.rdo.js';
+import OfferRdo from '../offer/rdo/offer.rdo.js';
 import {
   excludeExtraneousValues,
   getErrorConflict
@@ -101,7 +101,16 @@ export class FavoriteController extends BaseController {
     }
 
     await this.favoriteService.create({offer: offerId, email});
-    this.created<string>(res, `Offer with ${offerId} added to favorites.`);
+
+    const offer = await this.offerService.findById(offerId);
+
+    const changeOffer = {
+      ...offer?.toObject(),
+      favorites: true,
+      id: offerId
+    };
+
+    this.created(res, excludeExtraneousValues(OfferRdo, changeOffer));
   }
 
   public async delete(
@@ -122,7 +131,10 @@ export class FavoriteController extends BaseController {
     }
 
     await this.favoriteService.deleteById(existsFavoriteOffer.id);
-    this.ok<string>(res, `Offer with id ${existsFavoriteOffer.id} delete.`);
+
+    const offer = await this.offerService.findById(offerId);
+
+    this.ok(res, excludeExtraneousValues(OfferRdo, offer));
   }
 
   public async getFavoriteOffersList(
@@ -149,12 +161,13 @@ export class FavoriteController extends BaseController {
 
       const changeOffer = {
         ...offer?.toObject(),
-        favorites: true
+        favorites: true,
+        id: favoritOffer.id
       };
 
       result.push(changeOffer as OfferEntity);
     }
 
-    this.ok(res,excludeExtraneousValues(OffersListRdo, result));
+    this.ok(res,excludeExtraneousValues(OfferRdo, result));
   }
 }
