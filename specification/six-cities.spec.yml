@@ -1,0 +1,1173 @@
+openapi: 3.0.0
+info:
+  title: API сервер для проекта «SIX-CITIES».
+  description: Список ресурсов и маршрутов сервера «SIX-CITIES».
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  version: 2.0.0
+tags:
+  - name: users
+    description: Действия с пользователем.
+  - name: offers
+    description: Действия с предложениями.
+  - name: favorites
+    description: Действия с избранными предложениями.
+  - name: comments
+    description: Действия с комментариями.
+  - name: refresh
+    description: Действие с refreshTokenom
+
+paths:
+  /users/register:
+    post:
+      tags:
+        - users
+      summary: Регистрация пользователя
+      description: Создавать новых пользователей могут только анонимные клиенты.
+
+      requestBody:
+        description: Информация для создания нового пользователя.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createUser'
+        required: true
+
+      responses:
+        "201":
+          description: Пользователь зарегистрирован. Объект пользователя.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+
+        "409":
+          description: User with email Alex@A.ru exists..
+
+        "400":
+          description: Ошибка валидации.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/validationError'
+
+  /users/login:
+    post:
+      tags:
+        - users
+      summary: Ресурс для аунтификации и авторизации пользователя.
+      description: Вход в закрытую часть приложения.
+
+      requestBody:
+        description: Информация для входа в закрытую часть приложения.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/dataUserForLogin'
+        required: true
+
+      responses:
+        "201":
+          description: Пользователь вошел в закрытую часть приложения.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/dataUserAfterLogin'
+
+        "400":
+          description: Ошибка валидации.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/validationError'
+
+  /users/{userId}/avatar:
+    post:
+      tags:
+        - users
+      summary: Ресурс для передачи аватара пользователя.
+      description: Сохранение аватара пользователя.
+
+      requestBody:
+        description: Аватар пользователя.
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                  avatar:
+                    type: string
+                    example: avatar-angelina.jpg
+        required: true
+
+      responses:
+        "201":
+          description: Аватар сохранен.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  avatarUser:
+                    type: string
+                    example: http://localhost:4000/upload/c9927f31-c69f-4e60-8026-eb1906b818e9.png
+
+        "409":
+          description: 'User with id: 6662aa92389afca01d2c6e80 does not exist.'
+
+        "400":
+          description: Ошибка валидации.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/validationError'
+
+  /users/authenticate:
+    get:
+      tags:
+        - users
+      summary: Ресурс для проверки состояния клиента
+      description: Проверка состояния клиента производится на основании сессионного токена.
+
+      responses:
+        "201":
+          description: Пользователь авторизован.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/userAuthorized'
+
+        "401":
+          description: Unauthorized
+
+        "402":
+          description: Невалидный токен.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/invalidToken'
+
+        "400":
+          description: Не авторизованы.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/unauthorized'
+
+  /users/logout:
+    delete:
+      tags:
+        - users
+      summary: Ресурс для завершения пользовательского сеанса.
+      description: Ресурс доступен только авторизованным клиентам.
+
+      responses:
+        "201":
+          description: Выход из закрытой части приложения.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/userAuthorized'
+
+        "409":
+          description: User with email Alex@A.ru not registered.
+
+        "402":
+          description: Невалидный токен.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/invalidToken'
+
+        "400":
+          description: Не авторизованы.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/unauthorized'
+
+  /favorites/create/{offerId}:
+    post:
+      tags:
+        - favorites
+      summary: Ресурс для добавления предложения в список избранных предложений.
+      description: Ресурс доступин только авторизованным клиентам.
+
+      responses:
+        "201":
+          description: Предложение добавлено в избранное.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/favoriteOffer'
+
+        "406":
+          description: Не валидный ObjectID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/invalidObjectID'
+
+        "409":
+          description: User with email Alex@A.ru not registered..
+
+        "402":
+          description: Невалидный токен.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/invalidToken'
+
+        "400":
+          description: Не авторизованы.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/unauthorized'
+
+        "200":
+          description: Offer with 666556a5268eec7345a17585 has been added to favorites.
+
+  /favorites/delete/{offerId}:
+    post:
+      tags:
+        - favorites
+      summary: Ресурс для удаления предложения из списка избранных предложений.
+      description: Ресурс доступин только авторизованным клиентам.
+
+      responses:
+        "201":
+          description: Предложение добавлено в избранное.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/favoriteOffer'
+
+        "406":
+          description: Не валидный ObjectID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/invalidObjectID'
+
+        "409":
+          description:
+            Возможно одно из двух сообщений по данной ошибки
+            User with email Alex@A.ru not registered.
+            или
+            You can't delete an offer with 666556a5268eec7345a17585 because you didn't create it.
+
+        "402":
+          description: Невалидный токен.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/invalidToken'
+
+        "400":
+          description: Не авторизованы.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/unauthorized'
+
+  /favorites/list:
+    get:
+      tags:
+        - favorites
+      summary: Ресурс для получения предложений, добавленных в избранное.
+      description: Ресурс доступин только авторизованным клиентам.
+
+      responses:
+        "201":
+          description: Предложение добавлено в избранное.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/favoriteOffer'
+
+        "409":
+          description: User with email Alex@A.ru not registered.
+
+        "402":
+          description: Невалидный токен.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/invalidToken'
+
+        "400":
+          description: Не авторизованы.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/unauthorized'
+
+  /comments/list/{offerId}:
+    get:
+      tags:
+        - comments
+      summary: Ресурс для получения списка комментариев для определенного предложения.
+      description: Комментарии могут запрашивать авторизованные и анонимные клиенты.
+
+      responses:
+        "201":
+          description: Сервер возвращает список из 50 (или меньше) последних комментариев.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/commentsList'
+
+        "406":
+          description: Не валидный ObjectID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/invalidObjectID'
+
+  /comments/create/{offerId}:
+    post:
+      tags:
+        - comments
+      summary: Ресурс для добавления комментариев к определенному предложению по аренде.
+      description: Добавлять комментарии могут только авторизованные клиенты.
+
+      requestBody:
+        description: Информация для добавления нового комментария.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/dataComment'
+        required: true
+
+      responses:
+        "201":
+          description: Сервис возвращает информацию о созданном комментарии.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/newComment'
+
+        "400":
+          description: Ошибка валидации.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/validationError'
+
+        "406":
+          description: Не валидный ObjectID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/invalidObjectID'
+
+        "402":
+          description: Невалидный токен.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/invalidToken'
+
+  /refresh/login:
+    post:
+      tags:
+        - refresh
+      summary: Ресурс для создания новой пары accessToken, refreshToken
+      description: Ресурс доступин авторизованным клиентам.
+
+      responses:
+        "201":
+          description: Пользователь получил новую пару accessToken, refreshToken.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/dataUserAfterLogin'
+
+        "409":
+          description: User with email Alex@A.ru exists.
+
+        "402":
+          description: Невалидный токен.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/invalidToken'
+
+        "400":
+          description: Не авторизованы.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/unauthorized'
+
+  /offers/create:
+    post:
+      tags:
+        - offers
+      summary: Ресурс для создания новых предложений
+      description: Создовать предложения могут только авторизованные клиенты.
+
+      requestBody:
+        description: Для создания нового предложения по аренде клиент передает следующую информацию .
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/dataOffer'
+        required: true
+
+      responses:
+        "201":
+          description: В случае успешного создания предложения сервис в ответ возвращает информацию о созданом предложении.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/offer'
+
+        "409":
+          description: User with email Alex@A.ru exists.
+
+        "402":
+          description: Невалидный токен.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/invalidToken'
+
+        "400":
+          description: Ошибка валидации.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/validationError'
+
+  /offers/redaction/{offerId}:
+    patch:
+      tags:
+        - offers
+      summary: Ресурс для редактирования предложения.
+      description: Редактировать предложения могут только авторизованные клиенты и созданное ими.
+
+      requestBody:
+        description: Для редактирования предложения по аренде клиент передает следующую информацию .
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/offer'
+        required: true
+
+      responses:
+        "201":
+          description: В случае успешного обнавления предложения сервис возвращает клиенту обновленный объект предложения.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/offer'
+
+        "409":
+          description: User with email Alex@A.ru not registered.
+
+        "402":
+          description: Невалидный токен.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/invalidToken'
+
+        "406":
+          description: Не валидный ObjectID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/invalidObjectID'
+
+        "400":
+          description: Ошибка валидации.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/validationError'
+
+  /offers/delete/{offerId}:
+    delete:
+      tags:
+        - offers
+      summary: Ресурс для удаления предложения.
+      description: Удалить предложения могут только авторизованные клиенты и созданное ими.
+
+      responses:
+        "200":
+          description: В случае успешного удаления объект предложения.
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Offer with id ${result?.id}, deleted successfully
+
+        "409":
+          description: Пользователь не зарегистрирован.
+          content:
+            application/json:
+              schema:
+                type: string
+                example: User with email Alex@A.ru not registered.
+
+        "402":
+          description: Невалидный токен.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/invalidToken'
+
+        "406":
+          description: Не валидный ObjectID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/invalidObjectID'
+
+        "400":
+          description: Не авторизованы.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/unauthorized'
+
+  /offers/list?count={number}:
+    get:
+      tags:
+        - offers
+      summary: Ресурс возвращает список предложений по аренде.
+      description:
+        По умолчанию сервис возвращает не более 60 предложений по аренде.
+        Клиент может запросить больше предложений, указав нужное количество в параметре запроса {count}
+
+      responses:
+        "200":
+          description: В случае успешного запроса.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/premiumOffersList'
+
+  /offers/offer/{offerId}:
+    get:
+      tags:
+        - offers
+      summary: Ресурс для получения детальной информации по одному предложению.
+      description: Детальную информацию по предложению могут запрашивать авторизованные и анонимные клиенты.
+
+      responses:
+        "200":
+          description: Детальная информация по предложению.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/offer'
+
+        "406":
+          description: Не валидный ObjectID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/invalidObjectID'
+
+  /offers/premium:
+    get:
+      tags:
+        - offers
+      summary: Ресурс для предоставления премиальных предложений.
+      description:
+        Ресурс доступен авторизованным и анонимным клиентам.
+        Ресурс возвращает предложения по определенному городу и не больше 3-х.
+
+      responses:
+        "200":
+          description: В случае успешного запроса.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/premiumOffersList'
+
+components:
+  schemas:
+    createUser:
+      type: object
+
+      properties:
+        name:
+          type: string
+          example: Alex
+
+        email:
+          type: string
+          example: Alex@A.ru
+
+        avatarUser:
+          type: string
+          example: avatar.jpg
+
+        password:
+          type: string
+          example: 123Alex
+
+        typeUser:
+          type: string
+          example: pro
+
+    user:
+      type: object
+
+      properties:
+        id:
+          type: string
+          example: 6662aa92389afca01d2c6e80
+
+        name:
+          type: string
+          example: Alex
+
+        email:
+          type: string
+          example: Alex@A.ru
+
+        avatarUser:
+          type: string
+          example: http://localhost:4000/upload/5085a2f7-9b44-433f-b345-5894d212b749.png
+
+        typeUser:
+           type: string
+           example: pro
+
+    validationError:
+      type:  object
+
+      properties:
+        errorType:
+          type: string
+          example: VALIDATION_ERROR
+
+        error:
+          type: string
+          example: 'Validation error: /register'
+
+        details:
+          type: array
+          example:
+            - property: email
+              value: vlad@v
+              message: \email\ must be a valid email
+            - property: typeUser
+              value: ordinary
+              message: \typeUser\ must be one of [regular, pro]
+
+    dataUserForLogin:
+      type: object
+
+      properties:
+        email:
+          type: string
+          example: Alex@A.ru
+
+        password:
+          type: string
+          example: 123Alex
+
+    dataUserAfterLogin:
+      type: object
+
+      properties:
+        id:
+          type: string
+          example: 6662aa92389afca01d2c6e80
+
+        name:
+          type: string
+          example: Alex
+
+        email:
+          type: string
+          example: Alex@A.ru
+
+        avatarUser:
+          type: string
+          example: avatar.jpg
+
+        typeUser:
+           type: string
+           example: pro
+
+        token:
+          type: string
+          example: dc32gwg_dwb5px2-48b7108f72d1baf101155e858fc17403
+
+        refreshToken:
+          type: string
+          example: dc32gwg_dwb5px2-48b7108f72d1baf101155e858fc676789
+
+    userAuthorized:
+      type: object
+
+      properties:
+        id:
+          type: string
+          example: 6662aa92389afca01d2c6e80
+
+        name:
+          type: string
+          example: Alex
+
+        email:
+          type: string
+          example: Alex@A.ru
+
+        avatarUser:
+          type: string
+          example: avatar.jpg
+
+        typeUser:
+           type: string
+           example: pro
+
+    invalidToken:
+      type: object
+
+      properties:
+        errorType:
+          type: string
+          example: COMMON_ERROR
+
+        error:
+          type: string
+          example: Invalid token
+
+        details:
+          type: array
+          example: []
+
+    unauthorized:
+      type: object
+
+      properties:
+        errorType:
+          type: string
+          example: COMMON_ERROR
+
+        error:
+          type: string
+          example: Unauthorized
+
+        details:
+          type: array
+          example: []
+
+    favoriteOffer:
+      type: object
+
+      properties:
+        id:
+          type: string
+          example: 666556a5268eec7345a17585
+
+        denomination:
+          type: string
+          example: Hotel Volgograd Five Star
+
+        descriptionOffer:
+          type: string
+          example: This is hotel lacated in the city center near to the square of stars.
+
+        datePublication:
+          type: string
+          example: '2024-06-09T07:03:28.672Z'
+
+        city:
+          type: string
+          example: Amsterdam
+
+        previewImage:
+          type: string
+          example: http://localhost:3000/img\\apartment-01.jpg
+
+        photosHousing:
+          type: array
+          example:
+          - http://localhost:3000/img\\apartment-02.jpg
+          - http://localhost:3000/img\\apartment-03.jpg
+          - http://localhost:3000/img\\apartment-01.jpg
+          - http://localhost:3000/img\\apartment-02.jpg
+          - http://localhost:3000/img\\apartment-03.jpg
+          - http://localhost:3000/img\\apartment-03.jpg
+
+        premium:
+          type: boolean
+          example: true
+
+        favorites:
+          type: boolean
+          example: true
+
+        rating:
+          type: number
+          example: 0
+
+        typeHousing:
+          type: string
+          example: apartment
+
+        numberRooms:
+          type: number
+          example: 4
+
+        numberGuests:
+          type: number
+          example: 7
+
+        rentPrice:
+          type: number
+          example: 2000
+
+        comforts:
+          type: array
+          example:
+          - Breakfast
+          - Air conditioning
+          - Baby seat
+          - Washer
+          - Towels
+          - Fridge
+
+        authorOfOffer:
+          type: object
+          example: {
+            name: Vlad,
+            email: vlad@v.ru,
+            avatarUser: http://localhost:4000/upload/5f676738-d1a3-4645-af50-45ad4e3b8385.jpeg,
+            typeUser: pro
+          }
+
+        numberOfComments:
+          type: string
+          example: 0
+
+        coordinates:
+          type: object
+          example: {
+           latitude: 52.37454,
+           longitude: 4.897976
+          }
+
+    invalidObjectID:
+      type: object
+
+      properties:
+        errorType:
+          type: string
+          example: COMMON_ERROR
+
+        error:
+          type: string
+          example: 666556a5268eec7345a175 is invalid ObjectID
+
+        details:
+          type: array
+          example: []
+
+    commentsList:
+
+      type: array
+
+      example: [
+        {
+        id: 6665732c6fdc32adf1586360,
+        text: Апартаменты отличные для отеля. Минус общая для 3-х номеров санузел.,
+        rating: 3,
+        authorOfOffer: {
+          id: 6662aa92389afca01d2c6e80,
+          name: Vlad,
+          email: vlad@v.ru,
+          avatarUser: http://localhost:4000/upload/c9927f31-c69f-4e60-8026-eb1906b818e9.png,
+          typeUser: pro
+        },
+        createdAt: '2024-06-09T09:17:32.337Z'
+        }
+      ]
+
+    dataComment:
+      type: object
+
+      properties:
+        text:
+          type: string
+          example: This's Rostov big Star hotel is good hotel for big famerly and big company.
+
+        datePublication:
+          type: string
+          example: '2024-05-29T21:00:00.000Z'
+
+        rating:
+          type: number
+          example: 4
+
+        authorOfOffer:
+          type: string
+          example: 664f659758fc7770e686b889
+
+    newComment:
+      type: object
+
+      properties:
+        id:
+          type: string
+          example: 6665732c6fdc32adf1586360
+
+        text:
+          type: string
+          example: Апартаменты отличные для отеля. Минус общая для 3-х номеров санузел.
+
+        rating:
+          type: number
+          example: 3
+
+        authorOfOffer:
+          type: object
+          example: {
+            id: 6662aa92389afca01d2c6e80,
+            name: Vlad,
+            email: vlad@v.ru,
+            avatarUser: http://localhost:4000/upload/c9927f31-c69f-4e60-8026-eb1906b818e9.png,
+            typeUser: pro
+          }
+
+        createdAt:
+          type: string
+          example: '2024-06-09T09:17:32.337Z'
+
+    offer:
+      type: object
+
+      properties:
+        id:
+          type: string
+          example: 666d22020a6501eafd33e92b
+
+        denomination:
+          type: string
+          example: Hotel Volgograd
+
+        descriptionOffer:
+          type: string
+          example: This is hotel lacated in the city center near to the square of stars.
+
+        datePublication:
+          type: string
+          example: '2024-06-15T05:04:59.692Z'
+
+        city:
+          type: string
+          example: Paris
+
+        previewImage:
+          type: string
+          example: img/room.jpg
+
+        photosHousing:
+          type: array
+          example: [
+            photo-1.jpg,
+            photo-2.jpg,
+            photo-3.jpg,
+            photo-4.jpg,
+            photo-5.jpg,
+            photo-6.jpg
+          ]
+
+        premium:
+          type: boolean
+          example: false
+
+        favorites:
+          type: boolean
+          example: false
+
+        rating:
+          type: number
+          example: 1
+
+        typeHousing:
+          type: string
+          example: hotel
+
+        numberRooms:
+          type: string
+          example: 6
+
+        numberGuests:
+          type: number
+          example: 9
+
+        rentPrice:
+          type: number
+          example: 12752
+
+        comforts:
+          type: array
+          example: [
+            Baby seat
+            Washer,
+            Towels,
+            Fridge
+          ]
+
+        authorOfOffer:
+          type: object
+          example: {
+            name: Vlad,
+            email: vlad@v.ru,
+            avatarUser: http://localhost:4000/upload/c9927f31-c69f-4e60-8026-eb1906b818e9.png,
+            typeUser: pro
+          }
+
+        numberOfComments:
+          type: number
+          example: 0
+
+        coordinates:
+          type: object
+          example: {
+            latitude: 52.370216,
+            longitude: 4.895168
+          }
+
+    dataOffer:
+      type: object
+
+      properties:
+        id:
+          type: string
+          example: 666d22020a6501eafd33e92b
+
+        denomination:
+          type: string
+          example: Hotel Volgograd
+
+        descriptionOffer:
+          type: string
+          example: This is hotel lacated in the city center near to the square of stars.
+
+        city:
+          type: string
+          example: Paris
+
+        previewImage:
+          type: string
+          example: img/room.jpg
+
+        photosHousing:
+          type: array
+          example: [
+            photo-1.jpg,
+            photo-2.jpg,
+            photo-3.jpg,
+            photo-4.jpg,
+            photo-5.jpg,
+            photo-6.jpg
+          ]
+
+        premium:
+          type: boolean
+          example: false
+
+        favorites:
+          type: boolean
+          example: false
+
+        rating:
+          type: number
+          example: 1
+
+        typeHousing:
+          type: string
+          example: hotel
+
+        numberRooms:
+          type: string
+          example: 6
+
+        numberGuests:
+          type: number
+          example: 9
+
+        rentPrice:
+          type: number
+          example: 12752
+
+        comforts:
+          type: array
+          example: [
+            Baby seat
+            Washer,
+            Towels,
+            Fridge
+          ]
+
+        numberOfComments:
+          type: number
+          example: 0
+
+        coordinates:
+          type: object
+          example: {
+            latitude: 52.370216,
+            longitude: 4.895168
+          }
+
+    premiumOffersList:
+      type: array
+
+      example:
+      [
+        {
+        id: 666556a5268eec7345a17585,
+        denomination: Hotel Volgograd Five Star ,
+        descriptionOffer: This is hotel lacated in the city center near to the square of stars.,
+        datePublication: '2024-06-09T07:03:28.672Z',
+        city: Amsterdam,
+        previewImage: http://localhost:3000/img\\apartment-01.jpg,
+        photosHousing: [
+          http://localhost:3000/img\\apartment-02.jpg,
+          http://localhost:3000/img\\apartment-03.jpg,
+          http://localhost:3000/img\\apartment-01.jpg,
+          http://localhost:3000/img\\apartment-02.jpg,
+          http://localhost:3000/img\\apartment-03.jpg,
+          http://localhost:3000/img\\apartment-03.jpg
+        ],
+        premium: true,
+        favorites: false,
+        rating: 0,
+        typeHousing: apartment,
+        numberRooms: 4,
+        numberGuests: 7,
+        rentPrice: 2000,
+        comforts: [
+          Breakfast,
+          Air conditioning,
+          Baby seat,
+          Washer,
+          Towels,
+          Fridge
+        ],
+        authorOfOffer: {
+          name: Vlad,
+          email: vlad@v.ru,
+          avatarUser: 5f676738-d1a3-4645-af50-45ad4e3b8385.jpeg,
+          typeUser: pro
+        },
+        numberOfComments: 0,
+        coordinates: {
+          latitude: 52.37454,
+          longitude: 4.897976
+        }
+        }
+      ]

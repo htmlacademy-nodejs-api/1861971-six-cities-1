@@ -32,7 +32,7 @@ export class HttpErrorExceptionFilter implements ExceptionFilter {
     this.logger.error(`[HttpErrorException]: ${req.path} # ${error.message}`, error);
 
     res
-      .status(StatusCodes.BAD_REQUEST)
+      .status(StatusCodes.PAYMENT_REQUIRED)
       .json(createErrorObject(ApplicationError.CommonError, error.message));
   }
 }

@@ -6,7 +6,7 @@ Content-Type: application/json
 
 {
   "name": "Vlad",
-  "email": "vlad@v.ru",
+  "email": "vlad@v",
   "password": "Volga34",
   "typeUser": "ordinary"
 }
@@ -19,13 +19,13 @@ Content-Type: application/json
 
 {
   "email": "vlad@v.ru",
-  "password": "Volga34"
+  "password": "1984V.V"
 }
 
 ###
 ## Отправить изображение
 
-POST http://localhost:4000/users/665f032d14983998026a1df9/avatar HTTP/1.1
+POST http://localhost:4000/users/6662aa92389afca01d2c6e80/avatar HTTP/1.1
 Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
 
 ------WebKitFormBoundary7MA4YWxkTrZu0gW
@@ -38,6 +38,6 @@ Content-Type: image/png
 ###
 ## Проверка состояния пользователя
 
-GET  http://localhost:4000/users/login HTTP/1.1
+GET  http://localhost:4000/users/authenticate HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiVmxhZCIsImVtYWlsIjoidmxhZEB2LnJ1IiwiaWQiOiI2NjVlZjBjNzIxODZhZDUwMzI3MTJmYWMiLCJpYXQiOjE3MTc1MDIyNzgsImV4cCI6MTcxNzUwMjg3OH0.0rLVnOtAykvnrJ1xFyTTW6E8UAVruNvMOKUTbQzcehw

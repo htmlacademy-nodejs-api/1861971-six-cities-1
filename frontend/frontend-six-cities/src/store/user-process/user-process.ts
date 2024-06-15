@@ -13,15 +13,7 @@ const initialState: UserProcess = {
 export const userProcess = createSlice({
   name: StoreSlice.UserProcess,
   initialState,
-  reducers: {
-    /*
-    userStatus: (state, action: PayloadAction<{email: string, avatarUrl: string}>) => {
-      state.user = action.payload.email;
-      state.avatar = action.payload.avatarUrl;
-      state.authorizationStatus = AuthorizationStatus.Auth;
-    }
-    */
-  },
+  reducers: {},
   extraReducers(builder) {
     builder
       .addCase(fetchUserStatus.fulfilled, (state, action) => {
@@ -45,5 +37,3 @@ export const userProcess = createSlice({
       });
   }
 });
-
-//export const {userStatus} = userProcess.actions;

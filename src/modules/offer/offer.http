@@ -2,12 +2,11 @@
 ## Создать новое предложение
 POST http://localhost:4000/offers/create HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiVmxhZCIsImVtYWlsIjoidmxhZEB2LnJ1IiwiaWQiOiI2NjVmMDMyZDE0OTgzOTk4MDI2YTFkZjkiLCJpYXQiOjE3MTc1NjY2MDcsImV4cCI6MTcxNzU2NzIwN30.MC1MegFKjks71TTjIJqOOwqavlkSX65H2QsnIsQjZX4
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiVmxhZCIsImVtYWlsIjoidmxhZEB2LnJ1IiwiaWQiOiI2NjYyYWE5MjM4OWFmY2EwMWQyYzZlODAiLCJpYXQiOjE3MTgzNjc0MjcsImV4cCI6MTcxODQ1MzgyN30.2XdK4VZbgM000o9SsELixy6gwqEVTsiHe9Gg0OgK4OI
 
 {
 "denomination": "Hotel Volgograd",
   "descriptionOffer": "This is hotel lacated in the city center near to the square of stars.",
-  "datePublication": "2024-05-29T21:00:00.000Z",
   "city": "Paris",
   "previewImage": "img/room.jpg",
   "photosHousing": [
@@ -25,12 +24,6 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiVmxhZCIsI
   "numberGuests": 9,
   "rentPrice": 12752,
   "comforts": ["Baby seat","Washer","Towels","Fridge"],
-  "authorOfOffer": {
-    "name": "Vlad",
-    "email": "vlad@v.ru",
-    "avatarUser": "fadfaa3d-04a2-401e-809c-46c26145bec4.png",
-    "typeUser": "ordinary"
-  },
   "coordinates": {
     "latitude": 52.370216,
     "longitude": 4.895168
