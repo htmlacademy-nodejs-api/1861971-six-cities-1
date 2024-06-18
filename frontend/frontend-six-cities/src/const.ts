@@ -56,7 +56,8 @@ export enum ApiRoute {
   List = '/list',
   Delete = '/delete',
   Redaction = '/redaction',
-  ShowOffer = '/offer'
+  ShowOffer = '/offer',
+  Authenticate = '/authenticate'
 }
 
 export enum AuthorizationStatus {

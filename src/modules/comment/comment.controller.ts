@@ -81,7 +81,7 @@ export class CommentController extends BaseController {
       offerId: offerId,
       datePublication: ''
     });
-    this.ok(res, excludeExtraneousValues(CommentRdo, dataComment));
+    this.created(res, excludeExtraneousValues(CommentRdo, dataComment));
   }
 
   public async index(

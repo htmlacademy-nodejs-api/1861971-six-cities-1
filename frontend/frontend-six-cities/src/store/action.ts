@@ -3,7 +3,6 @@ import type { AxiosInstance, AxiosError } from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import type {
   UserAuth,
-  //User,
   Offer,
   Comment,
   CommentAuth,
@@ -36,7 +35,6 @@ import {
   adaptDataOfferToClien,
   adaptDataCommentToClient
 } from '../utils/adaptersToClient';
-//import {userStatus} from '../store/user-process/user-process';
 
 type Extra = {
   api: AxiosInstance;
@@ -193,29 +191,7 @@ export const fetchComments = createAsyncThunk<Comment[], Offer['id'], { extra: E
 
     return commentsList;
   });
-/*
-export const fetchGetNewPairsToken = createAsyncThunk<
-void,
-undefined,
-{ extra: Extra }>(
-  Action.FETCH_GET_NEW_PAIRS_TOKEN,
-  async (_, {dispatch, extra }) => {
-    const { api } = extra;
 
-    try {
-      const { data } = await api.get<LoggedUserRdo>(`${ApiRoute.RefreshToken}${ApiRoute.Login}`);
-
-      const adaptedDataUserToClient = adaptDataUserToClient(data);
-
-      Token.save(adaptedDataUserToClient.token, NameToken.Token);
-      Token.save(adaptedDataUserToClient.refreshToken, NameToken.RefreshToken);
-
-      dispatch(fetchUserStatus());
-    } catch (error) {
-      return Promise.reject(error);
-    }
-  });
-*/
 export const fetchUserStatus = createAsyncThunk<
 {email: string, avatarUrl: string},
 undefined,
@@ -225,7 +201,7 @@ undefined,
     const { api } = extra;
 
     try{
-      const {data} = await api.get<UserRdo>(`${ApiRoute.Users}${ApiRoute.Login}`);
+      const {data} = await api.get<UserRdo>(`${ApiRoute.Users}${ApiRoute.Authenticate}`);
 
       const {email, avatarUrl} = adaptDataUserStatusToClient(data);
       return {email, avatarUrl};

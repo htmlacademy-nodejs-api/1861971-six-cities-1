@@ -73,7 +73,7 @@ export class UserController extends BaseController {
       ]
     });
     this.addRoute({
-      path: '/login',
+      path: '/authenticate',
       method: HttpMethod.Get,
       handler: this.checkAuthenticate,
       middlewares: [
