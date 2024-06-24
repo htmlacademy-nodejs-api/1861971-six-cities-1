@@ -17,6 +17,7 @@ import {
   STATIC_UPLOAD_ROUTE,
   STATIC_FILES_ROUTE
 } from './index.js';
+import {getPath} from '../helpers/index.js';
 
 @injectable()
 export default class Application {
@@ -67,11 +68,11 @@ export default class Application {
     this.server.use(express.json());
     this.server.use(
       STATIC_UPLOAD_ROUTE,
-      express.static(this.config.get('UPLOAD_DIRECTORY'))
+      express.static(getPath(this.config.get('UPLOAD_DIRECTORY')))
     );
     this.server.use(
       STATIC_FILES_ROUTE,
-      express.static(this.config.get('STATIC_DIRECTORY_PATH'))
+      express.static(getPath(this.config.get('STATIC_DIRECTORY_PATH')))
     );
     this.server.use(cors());
   }

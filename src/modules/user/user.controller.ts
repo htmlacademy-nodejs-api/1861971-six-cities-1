@@ -25,7 +25,8 @@ import {
 } from './index.js';
 import {
   excludeExtraneousValues,
-  getErrorConflict
+  getErrorConflict,
+  getPath
 } from '../../helpers/index.js';
 import UserRdo from './rdo/user.rdo.js';
 import UploadUserAvatarRdo from './rdo/upload-user-avatar.rdo.js';
@@ -69,7 +70,7 @@ export class UserController extends BaseController {
       handler: this.uploadAvatar,
       middlewares: [
         new ValidateObjectIdMiddleware('userId'),
-        new UploadFileMiddleware(this.configService.get('UPLOAD_DIRECTORY'), 'avatar'),
+        new UploadFileMiddleware(getPath(this.configService.get('UPLOAD_DIRECTORY')), 'avatar'),
       ]
     });
     this.addRoute({
