@@ -21,8 +21,8 @@ npm install
 `DB_USER=VladVankov` - Для настройки конфигурации MonogoDB с использованием конфигурационного файла docker-compose.dev.yml
 `DB_HOST=127.0.0.1` - IP адрес сервера MongoDB
 `DB_PORT=20047` - Связывает и прослушивает соединения на указанном порту. Для старта базы данных.
-`UPLOAD_DIRECTORY=C:\Users\User\Desktop\1861971-six-cities-1\uploaded-files` - Путь к директории для хранения пользовательских файлов.
-`STATIC_DIRECTORY_PATH=C:\Users\User\Desktop\1861971-six-cities-1\static` - Путь к директории для хранения файлов по умолчанию.
+`UPLOAD_DIRECTORY=uploaded-files` - Путь к директории для хранения пользовательских файлов.
+`STATIC_DIRECTORY_PATH=static` - Путь к директории для хранения файлов по умолчанию.
 `JWT_ACCESS_SECRET=Che_Guevara` - Секркт для создания подписи для accessToken.
 `JWT_REFRESH_SECRET=Alberto` - Секркт для создания подписи для refreshToken.
 `HOST=localhost` - Хост сервера
@@ -136,5 +136,5 @@ npm run start:dev
 #### Пример запуска команды
  
  ```bash
-npm run ts .\src\main.cli.ts -- --import .\mocks\mock-data.tsv
+npm run ts ./src/main.cli.ts -- --import ./mocks/mock-data.tsv
 ```
