@@ -44,7 +44,7 @@ export const getOffersList = (rawData: string): Offer => {
   const namesCities: CitiesList = NamesCities[city as CitiesList];
   const photosList = photosHousing.split(',') as PhotosHousing;
   const nameHousing = typeHousing as TypeHousinList;
-  const nameComfort = comforts as TypeComfortList;
+  const nameComfort = comforts as unknown as TypeComfortList[];
   const categoryUser = typeUser as TypeUserList;
 
   return ({

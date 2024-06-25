@@ -11,3 +11,4 @@ export * from './create-error-object.js';
 export * from './get-error-conflict.js';
 export * from './get-full-server-path.js';
 export * from './reduce-validation-errors.js';
+export * from './get-path.js';

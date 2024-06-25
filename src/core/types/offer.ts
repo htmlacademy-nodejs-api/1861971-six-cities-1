@@ -27,7 +27,7 @@ export type Offer = {
   numberRooms: number;
   numberGuests: number;
   rentPrice: number;
-  comforts: TypeComfortList;
+  comforts: TypeComfortList[];
   authorOfOffer: User;
   numberOfComments?: number;
   coordinates: CoordinatesOffer;
