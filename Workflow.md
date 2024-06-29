@@ -19,13 +19,13 @@ npm install
 `SALT=password` - Секркт для создания хэша.
 `DB_PASSWORD=v1984vlad` - Для настройки конфигурации MonogoDB с использованием конфигурационного файла docker-compose.dev.yml
 `DB_USER=VladVankov` - Для настройки конфигурации MonogoDB с использованием конфигурационного файла docker-compose.dev.yml
-`DB_HOST=127.0.0.1` - IP адрес сервера MongoDB
+`DB_HOST=127.0.0.1` - IP адрес сервера MongoDB. Установите значение 127.0.0.1 !!! В случае невозможности подключения к серверу, утачните IP в документации https://www.npmjs.com/package/mongodb
 `DB_PORT=20047` - Связывает и прослушивает соединения на указанном порту. Для старта базы данных.
 `UPLOAD_DIRECTORY=uploaded-files` - Путь к директории для хранения пользовательских файлов.
 `STATIC_DIRECTORY_PATH=static` - Путь к директории для хранения файлов по умолчанию.
 `JWT_ACCESS_SECRET=Che_Guevara` - Секркт для создания подписи для accessToken.
 `JWT_REFRESH_SECRET=Alberto` - Секркт для создания подписи для refreshToken.
-`HOST=localhost` - Хост сервера
+`HOST=localhost` - Хост сервера. Установите значение localhost !!!
 
 ### Сценарии
 
